@@ -1,88 +1,80 @@
 <template>
-  <v-container
-    id="login"
-    class="fill-height justify-center"
-    tag="section"
-  >
-    <v-row justify="center">
-      <v-slide-y-transition appear>
-        
-          <template v-slot:heading>
-            <div class="text-center">
-              <h1 class="display-2 font-weight-bold mb-2">
-                Login
-              </h1>
+    <v-row>
+        <v-col cols="12" lg="7" xl="6" class="info d-none d-md-flex align-center justify-center">
+            <v-container>
+            </v-container>
+        </v-col>
+        <v-col cols="12" lg="5" xl="6" class="d-flex align-center">
+            <v-container>
+                <div class="pa-7 pa-sm-12">
+                    <v-row>
+                        <v-col cols="12" lg="9" xl="6">
+                            <img src="@/assets/images/logo-icon.png" />
+                            <h2 class="font-weight-bold mt-4 blue-grey--text text--darken-2">Login</h2>
 
-              <v-btn
-                v-for="(social, i) in socials"
-                :key="i"
-                :href="social.href"
-                class="ma-1"
-                icon
-                rel="noopener"
-                target="_blank"
-              >
-                <v-icon
-                  v-text="social.icon"
-                />
-              </v-btn>
-            </div>
-          </template>
+                            <v-form
+                                ref="form"
+                                v-model="valid"
+                                lazy-validation
+                            >
+                                <v-text-field
+                                    v-model="email"
+                                    :rules="emailRules"
+                                    label="E-mail"
+                                    class="mt-4"
+                                    required
+                                    outlined
+                                ></v-text-field>
+                                <v-text-field
+                                    v-model="password"
+                                    :rules="passwordRules"
+                                    label="Password"
+                                    required
+                                    outlined
+                                    :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
+                                    :type="showPassword ? 'text' : 'password'"
+                                ></v-text-field>
 
-          <v-card-text class="text-center">
-            <div class="text-center grey--text body-1 font-weight-light">
-              Or Be Classical
-            </div>
-
-            <v-text-field
-              color="secondary"
-              label="First Name..."
-              prepend-icon="mdi-face"
-              class="mt-10"
-            />
-
-            <v-text-field
-              color="secondary"
-              label="Email..."
-              prepend-icon="mdi-email"
-            />
-
-            <v-text-field
-              class="mb-8"
-              color="secondary"
-              label="Password..."
-              prepend-icon="mdi-lock-outline"
-            />
-
-            
-          </v-card-text>
-        
-      </v-slide-y-transition>
+                                <v-btn
+                                    :disabled="!valid"
+                                    color="info"
+                                    block
+                                    class="mr-4"
+                                    submit
+                                    @click="submit"
+                                >Sign In</v-btn>
+                            </v-form>
+                        </v-col>
+                    </v-row>
+                </div>
+            </v-container>
+        </v-col>
     </v-row>
-  </v-container>
 </template>
 
 <script>
-  export default {
-    name: 'PagesLogin',
-
-   
-
-    data: () => ({
-      socials: [
-        {
-          href: '#',
-          icon: 'mdi-facebook-box',
-        },
-        {
-          href: '#',
-          icon: 'mdi-twitter',
-        },
-        {
-          href: '#',
-          icon: 'mdi-github-box',
-        },
-      ],
-    }),
-  }
+    export default {
+        name: "Login",
+        data: () => ({
+            valid: true,
+            email: "",
+            password: "",
+            showPassword: false,
+            passwordRules: [
+                v => !!v || "Password is required"
+            ],
+            emailRules: [
+                v => !!v || "E-mail is required",
+                v => /.+@.+\..+/.test(v) || "E-mail must be valid"
+            ]
+        }),
+        methods: {
+            submit() {
+                this.$refs.form.validate();
+                if (this.$refs.form.validate(true)) {
+                    this.$router.push({ path: "/dashboards/analytical" });
+                }
+            }
+        }
+    };
 </script>

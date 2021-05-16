@@ -8,12 +8,16 @@ export default new Vuex.Store({
         token: null,
         user: {},
         Sidebar_drawer: null,
-        Customizer_drawer: null,
+        Customizer_drawer: false,
+        useCustomizer: true,
         SidebarColor: "#007",
         SidebarBg: "",
         navbarColor: "#900",
         setHorizontalLayout: true,
+        hasFooter: false,
+        showLogo: true
     },
+
     mutations: {
         LOGIN(state, token, user) {
             state.token = token;
@@ -22,6 +26,9 @@ export default new Vuex.Store({
         LOGOUT(state) {
             state.token = null;
             state.user = {};
+        },
+        SET_CUSTOMIZER_DRAWER(state, payload) {
+            state.Customizer_drawer = payload;
         },
         SET_SIDEBAR_DRAWER(state, payload) {
             state.Sidebar_drawer = payload;
@@ -35,9 +42,15 @@ export default new Vuex.Store({
         SET_LAYOUT(state, payload) {
             state.setHorizontalLayout = payload;
         },
+        SHOW_HIDE_LOGO(state) {
+            state.showLogo = !state.showLogo;
+        },
     },
+
     actions: {},
+
     getters: {
+        logged: state => state.token != null,
         token: state => state.token,
         user: state => state.user
     },
