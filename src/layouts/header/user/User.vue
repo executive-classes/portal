@@ -9,7 +9,12 @@
         </template>
 
         <v-list>
-            <v-list-item v-for="(option, i) in options" :key="i" :to="option.to" @click="href">
+            <v-list-item
+                v-for="(option, i) in options"
+                :key="i"
+                :to="option.to"
+                @click="handle_click_call(option.click)"
+            >
                 <v-list-item-title>{{ option.title }}</v-list-item-title>
             </v-list-item>
         </v-list>
@@ -17,17 +22,31 @@
 </template>
 
 <script>
+    import { mapMutations } from "vuex";
+
     export default {
         name: "User",
 
         data: () => ({
             options: [
                 { title: "Configurações", to: { name: "profile" } },
-                { title: "Logout", to: { name: "login" } }
-            ],
-            href() {
-                return undefined;
-            }
+                { title: "Logout", click: "doLogout" }
+            ]
         }),
+
+        methods: {
+            ...mapMutations({
+                logout: "LOGOUT"
+            }),
+
+            handle_click_call(click) {
+                this[click]();
+            },
+
+            doLogout() {
+                this.logout();
+                this.$router.push({ name: "login" });
+            }
+        }
     };
 </script>

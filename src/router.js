@@ -31,9 +31,6 @@ const router = new Router({
                 {
                     name: "dashboard",
                     path: "dashboard",
-                    meta: {
-                        public: true
-                    },
                     component: () => import("@/views/dashboard/Dashboard"),
                 },
             ],
@@ -42,6 +39,22 @@ const router = new Router({
             name: "login",
             path: "/login",
             component: () => import("@/views/authentication/Login"),
+            meta: {
+                public: true
+            }
+        },
+        {
+            name: "password.recovery",
+            path: "/password/recovery",
+            component: () => import("@/views/authentication/PasswordRecovery"),
+            meta: {
+                public: true
+            }
+        },
+        {
+            name: "password.update",
+            path: "/password/update",
+            component: () => import("@/views/authentication/PasswordUpdate"),
             meta: {
                 public: true
             }

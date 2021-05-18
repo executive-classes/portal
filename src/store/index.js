@@ -5,27 +5,32 @@ Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        token: null,
-        user: {},
+        token: localStorage.getItem('token'),
+        user: localStorage.getItem('user'),
         Sidebar_drawer: null,
         Customizer_drawer: false,
         useCustomizer: true,
-        SidebarColor: "#007",
+        SidebarColor: "#0f0fa3",
         SidebarBg: "",
-        navbarColor: "#900",
+        navbarColor: "#ab1313",
         setHorizontalLayout: true,
         hasFooter: false,
-        showLogo: true
+        showLogo: true,
+        lang: 'pt_BR'
     },
 
     mutations: {
-        LOGIN(state, token, user) {
-            state.token = token;
-            state.user = user;
+        LOGIN(state, data) {
+            state.token = data.token;
+            state.user = data.user;
+            localStorage.setItem('token', data.token)
+            localStorage.setItem('user', data.user)
         },
         LOGOUT(state) {
             state.token = null;
             state.user = {};
+            localStorage.removeItem('token')
+            localStorage.removeItem('user')
         },
         SET_CUSTOMIZER_DRAWER(state, payload) {
             state.Customizer_drawer = payload;
