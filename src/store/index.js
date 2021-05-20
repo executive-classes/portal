@@ -11,7 +11,7 @@ export default new Vuex.Store({
         user: localStorage.getItem('user'),
         Sidebar_drawer: null,
         Customizer_drawer: false,
-        useCustomizer: true,
+        useCustomizer: false,
         SidebarColor: "#0f0fa3",
         SidebarBg: "",
         navbarColor: "#ab1313",

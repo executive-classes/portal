@@ -13,10 +13,17 @@
         <!-- ---------------------------------- -->
         <!--- Customizer button -->
         <!-- ---------------------------------- -->
-        <v-main v-show="useCustomizer">
+        <v-main>
             <v-container fluid class="page-wrapper">
+                <!-- Breadcrumb part -->
+                <BaseBreadcrumb></BaseBreadcrumb>
+
+                <!-- Page Content part -->
                 <router-view />
+
+                <!-- Customizer button -->
                 <v-btn
+                    v-show="useCustomizer"
                     bottom
                     color="success"
                     dark
@@ -49,6 +56,7 @@
     import Sidebar from "./sidebar/Sidebar";
     import Footer from "./footer/Footer";
     import Customizer from "./customizer/Customizer";
+    import BaseBreadcrumb from "@/components/commonComponents/BaseBreadcrumb";
     import { mapState, mapMutations } from "vuex";
 
     export default {
@@ -58,7 +66,8 @@
             Header,
             Sidebar,
             Footer,
-            Customizer
+            Customizer,
+            BaseBreadcrumb
         },
 
         props: {

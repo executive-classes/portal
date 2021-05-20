@@ -32,6 +32,23 @@ const router = new Router({
                     name: "dashboard",
                     path: "dashboard",
                     component: () => import("@/views/dashboard/Dashboard"),
+                    meta: {
+                        breadcrumbs: [
+                            { text: "Home", to: { name: "home" } },
+                            { text: "Dashboard", to: { name: "dashboard" } }
+                        ]
+                    },
+                },
+                {
+                    name: "bugs",
+                    path: "bugs",
+                    component: () => import("@/views/bugs/Bugs"),
+                    meta: {
+                        breadcrumbs: [
+                            { text: "Home", to: { name: "home" } },
+                            { text: "Bugs", to: { name: "bugs" } }
+                        ]
+                    },
                 },
             ],
         },
