@@ -73,6 +73,9 @@ const router = new Router({
 import store from "@/store";
 
 router.beforeEach((to, from, next) => {
+    // Check if the token is still valid.
+    store.commit('TOKEN_LIVES');
+
     // Redirect to login if the user is not authenticate.
     if (!to.meta.public && !store.getters.logged) {
         return next({ name: 'login' });

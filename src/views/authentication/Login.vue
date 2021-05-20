@@ -117,7 +117,8 @@
                         .then(response => {
                             this.login({
                                 token: response.data.plainTextToken,
-                                user: response.data.user
+                                user: response.data.user,   
+                                expires: response.data.accessToken.expires_at
                             });
                             this.$router.push({ name: "home" });
                         })

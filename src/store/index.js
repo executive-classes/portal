@@ -1,3 +1,4 @@
+import moment from "moment";
 import Vue from "vue";
 import Vuex from "vuex";
 
@@ -6,6 +7,7 @@ Vue.use(Vuex);
 export default new Vuex.Store({
     state: {
         token: localStorage.getItem('token'),
+        tokenEndTime: localStorage.getItem('tokenEndTime'),
         user: localStorage.getItem('user'),
         Sidebar_drawer: null,
         Customizer_drawer: false,
@@ -22,15 +24,24 @@ export default new Vuex.Store({
     mutations: {
         LOGIN(state, data) {
             state.token = data.token;
+            state.tokenEndTime = data.expires;
             state.user = data.user;
             localStorage.setItem('token', data.token)
+            localStorage.setItem('tokenEndTime', data.expires)
             localStorage.setItem('user', data.user)
         },
         LOGOUT(state) {
             state.token = null;
+            state.tokenEndTime = null;
             state.user = {};
             localStorage.removeItem('token')
+            localStorage.removeItem('tokenEndTime')
             localStorage.removeItem('user')
+        },
+        TOKEN_LIVES(state) {
+            if(moment().isAfter(state.tokenEndTime)) {
+                this.commit('LOGOUT');
+            }
         },
         SET_CUSTOMIZER_DRAWER(state, payload) {
             state.Customizer_drawer = payload;
