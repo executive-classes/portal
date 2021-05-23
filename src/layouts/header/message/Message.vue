@@ -2,10 +2,9 @@
     <v-menu bottom left offset-y origin="top right" transition="scale-transition">
         <template v-slot:activator="{ on }">
             <v-btn dark icon v-on="on" class="mr-2">
-                <v-badge color="red" dot v-if="messages.length > 0">
-                    <v-icon>{{ icon }}</v-icon>
+                <v-badge :value="messages.length" color="red" dot>
+                    <v-icon>fa-comments</v-icon>
                 </v-badge>
-                <v-icon v-else>{{ icon }}</v-icon>
             </v-btn>
         </template>
 
@@ -55,7 +54,6 @@
         name: "Message",
 
         data: () => ({
-            icon: "fa-comments",
             messages: []
         })
     };

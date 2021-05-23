@@ -4,6 +4,8 @@ import vuetify from "./plugins/vuetify";
 import router from "./router";
 import store from "./store";
 import http from './http';
+import rules from './rules';
+import moment from "moment";
 import Vuebar from "vuebar";
 import "./plugins/base";
 import VueSkycons from "vue-skycons";
@@ -17,6 +19,8 @@ Vue.config.productionTip = false;
 Vue.use(Vuebar);
 
 Vue.prototype.$http = http;
+Vue.prototype.$moment = moment;
+Vue.prototype.$rules = rules;
 
 new Vue({
     vuetify,

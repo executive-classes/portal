@@ -1,6 +1,6 @@
 <template>
     <v-row class="page-breadcrumb">
-        <v-col cols="12" sm="12" class="pa-0">
+        <v-col cols="12" sm="12" class="pa-0 pl-3">
             <v-card class="px-2 custom-shaodow">
                 <v-toolbar dense flat class="transparent pa-0" height="20px">
                     <v-toolbar-title class="toobar-extension transparent pb-3" slot="extension">

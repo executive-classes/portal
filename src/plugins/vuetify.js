@@ -13,7 +13,14 @@ const theme = {
     default: "#563dea",
 };
 
+import en from 'vuetify/src/locale/en.ts'
+import pt from 'vuetify/src/locale/pt.ts'
+
 export default new Vuetify({
+    lang: {
+        locales: { en, pt },
+        current: 'pt',
+    },
     theme: {
         themes: {
             dark: theme,

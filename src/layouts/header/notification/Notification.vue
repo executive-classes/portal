@@ -2,10 +2,9 @@
     <v-menu bottom left offset-y origin="top right" transition="scale-transition">
         <template v-slot:activator="{ on }">
             <v-btn dark icon v-on="on" class="mr-1">
-                <v-badge color="red" dot v-if="notifications.length > 0">
-                    <v-icon>{{ icon }}</v-icon>
+                <v-badge :value="notifications.length" color="red" dot>
+                    <v-icon>fa-bell</v-icon>
                 </v-badge>
-                <v-icon v-else>{{ icon }}</v-icon>
             </v-btn>
         </template>
 
@@ -39,7 +38,6 @@
         name: "Notification",
 
         data: () => ({
-            icon: "fa-bell",
             notifications: []
         })
     };
