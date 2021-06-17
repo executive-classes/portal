@@ -12,9 +12,9 @@ export default new Vuex.Store({
         Sidebar_drawer: null,
         Customizer_drawer: false,
         useCustomizer: false,
-        SidebarColor: "#0f0fa3",
         SidebarBg: "",
-        navbarColor: "#ab1313",
+        SidebarColor: "secondary",
+        navbarColor: "default",
         setHorizontalLayout: true,
         hasFooter: false,
         showLogo: true,
@@ -60,6 +60,12 @@ export default new Vuex.Store({
         },
         SHOW_HIDE_LOGO(state) {
             state.showLogo = !state.showLogo;
+        },
+        SET_MOBILE_LAYOUT(state) {
+            state.navbarColor = "secondary";
+        },
+        SET_LAPTOP_LAYOUT(state) {
+            state.navbarColor = "default";
         },
     },
 

@@ -5,7 +5,7 @@
         clipped-left
         clipped-right
         :color="navbarColor"
-        :dark="navbarColor !== 'white'"
+        :dark="dark"
     >
         <v-container class="py-0 px-0 d-flex">
             <!--- Logo part --->
@@ -15,15 +15,15 @@
             <Toggle :horizontal="true"></Toggle>
 
             <!--- Search --->
-            <Search></Search>
+            <Search :dark="dark"></Search>
 
             <v-spacer />
 
             <!--- Notification --->
-            <Notification></Notification>
+            <Notification :dark="dark"></Notification>
 
             <!--- Messages --->
-            <Message></Message>
+            <Message :dark="dark"></Message>
 
             <!--- User --->
             <User></User>
@@ -52,6 +52,13 @@
             User
         },
 
+        props: {
+            dark: {
+                type: Boolean,
+                default: false
+            }
+        },
+
         computed: {
             ...mapState(["navbarColor"])
         }
@@ -66,7 +73,7 @@
                 left: 0;
                 right: 0;
                 margin: 0 auto;
-                width: 235px;
+                width: 365px;
             }
         }
     }

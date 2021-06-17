@@ -1,6 +1,6 @@
 <template>
     <base-card title="Bugs" icon="fa-bug">
-        <base-alert :type="type" :alert="alert" :message="message"></base-alert>
+        <base-alert :alert="alert"></base-alert>
 
         <span slot="header">
             <SearchInput
@@ -56,6 +56,7 @@
     import RequestDialog from "@/components/bugsComponents/RequestDialog";
     import DataDialog from "@/components/bugsComponents/DataDialog";
     import ErrorDialog from "@/components/bugsComponents/ErrorDialog";
+    import Alert from "@/domain/alert/Alert";
 
     export default {
         name: "Bugs",
@@ -100,9 +101,7 @@
             bugs: [],
             search: "",
             loading: true,
-            type: "danger",
-            alert: false,
-            message: ""
+            alert: new Alert(),
         }),
 
         methods: {
@@ -146,7 +145,7 @@
                     this.bugs = response.data;
                     this.loading = false;
                 })
-                .catch(error => this.error(error.message));
+                .catch(error => this.alert.error(error.message));
         }
     };
 </script>

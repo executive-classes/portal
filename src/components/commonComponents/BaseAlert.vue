@@ -1,36 +1,26 @@
 <template>
     <v-alert
-        v-model="alert"
+        v-model="alert.show"
         dismissible
         transition="expand-transition"
-        color="danger"
+        :color="alert.type"
         border="left"
         elevation="2"
         colored-border
-        icon="fa-exclamation"
-    >{{message}}</v-alert>
+        :icon="alert.icon"
+    >{{alert.message}}</v-alert>
 </template>
 
 <script>
+    import Alert from "../../domain/alert/Alert";
+    
     export default {
         name: "BaseAlert",
 
         props: {
-            type: {
-                type: String,
-                default: "danger"
-            },
-            icon: {
-                type: String,
-                default: "fa-exclamation"
-            },
             alert: {
-                type: Boolean,
-                default: false
-            },
-            message: {
-                type: String,
-                default: ""
+                type: Object,
+                default: new Alert()
             }
         }
     };

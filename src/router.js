@@ -40,6 +40,97 @@ const router = new Router({
                     },
                 },
                 {
+                    name: "profile",
+                    path: "profile",
+                    component: () => import("@/views/profile/Profile"),
+                    meta: {
+                        breadcrumbs: [
+                            { text: "Home", to: { name: "home" } },
+                            { text: "Perfil", to: { name: "profile" } }
+                        ]
+                    },
+                },
+                {
+                    name: "users",
+                    path: "users",
+                    component: () => import("@/views/users/Users"),
+                    meta: {
+                        breadcrumbs: [
+                            { text: "Home", to: { name: "home" } },
+                            { text: "Usuários", to: { name: "users" } }
+                        ]
+                    }
+                },
+                {
+                    name: "user",
+                    path: "users/:id",
+                    component: () => import("@/views/users/User"),
+                    meta: {
+                        breadcrumbs: [
+                            { text: "Home", to: { name: "home" } },
+                            { text: "Usuários", to: { name: "users" } },
+                            { text: "Usuário", to: { name: "user" } }
+                        ]
+                    }
+                },
+                {
+                    name: "employees",
+                    path: "employees",
+                    component: () => import("@/views/employees/Employees"),
+                    meta: {
+                        breadcrumbs: [
+                            { text: "Home", to: { name: "home" } },
+                            { text: "Funcionários", to: { name: "employees" } }
+                        ]
+                    },
+                },
+                {
+                    name: "employee",
+                    path: "employees/:id",
+                    component: () => import("@/views/employees/Employee"),
+                    meta: {
+                        breadcrumbs: [
+                            { text: "Home", to: { name: "home" } },
+                            { text: "Funcionários", to: { name: "employees" } },
+                            { text: "Funcionário", to: { name: "employee" } }
+                        ]
+                    }
+                },
+                {
+                    name: "teachers",
+                    path: "teachers",
+                    component: () => import("@/views/teachers/Teachers"),
+                    meta: {
+                        breadcrumbs: [
+                            { text: "Home", to: { name: "home" } },
+                            { text: "Professores", to: { name: "teachers" } }
+                        ]
+                    },
+                },
+                {
+                    name: "teacher",
+                    path: "teachers/:id",
+                    component: () => import("@/views/teachers/Teacher"),
+                    meta: {
+                        breadcrumbs: [
+                            { text: "Home", to: { name: "home" } },
+                            { text: "Professores", to: { name: "teachers" } },
+                            { text: "Professor", to: { name: "teacher" } }
+                        ]
+                    },
+                },
+                {
+                    name: "students",
+                    path: "students",
+                    component: () => import("@/views/students/Students"),
+                    meta: {
+                        breadcrumbs: [
+                            { text: "Home", to: { name: "home" } },
+                            { text: "Alunos", to: { name: "students" } }
+                        ]
+                    },
+                },
+                {
                     name: "bugs",
                     path: "bugs",
                     component: () => import("@/views/bugs/Bugs"),
@@ -53,28 +144,36 @@ const router = new Router({
             ],
         },
         {
-            name: "login",
-            path: "/login",
-            component: () => import("@/views/authentication/Login"),
-            meta: {
-                public: true
-            }
-        },
-        {
-            name: "password.recovery",
-            path: "/password/recovery",
-            component: () => import("@/views/authentication/PasswordRecovery"),
-            meta: {
-                public: true
-            }
-        },
-        {
-            name: "password.update",
-            path: "/password/update",
-            component: () => import("@/views/authentication/PasswordUpdate"),
-            meta: {
-                public: true
-            }
+            name: "auth",
+            path: "/auth",
+            redirect: "login",
+            component: () => import("@/layouts/BlankLayout"),
+            children: [
+                {
+                    name: "login",
+                    path: "login",
+                    component: () => import("@/views/authentication/Login"),
+                    meta: {
+                        public: true
+                    }
+                },
+                {
+                    name: "password.recovery",
+                    path: "password/recovery",
+                    component: () => import("@/views/authentication/PasswordRecovery"),
+                    meta: {
+                        public: true
+                    }
+                },
+                {
+                    name: "password.update",
+                    path: "password/update",
+                    component: () => import("@/views/authentication/PasswordUpdate"),
+                    meta: {
+                        public: true
+                    }
+                },
+            ],
         },
         {
             path: "*",

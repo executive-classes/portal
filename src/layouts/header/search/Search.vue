@@ -1,6 +1,6 @@
 <template>
     <div>
-        <v-btn dark icon class="mr-1 d-sm-block d-none" @click="searchbox">
+        <v-btn :dark="dark || $vuetify.theme.dark" icon class="mr-1 d-sm-block d-none" @click="searchbox">
             <v-icon>fa-search</v-icon>
         </v-btn>
 
@@ -20,6 +20,13 @@
 <script>
     export default {
         name: "Script",
+
+        props: {
+            dark: {
+                type: Boolean,
+                default: false
+            }
+        },
 
         data: () => ({
             showSearch: false

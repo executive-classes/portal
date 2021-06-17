@@ -5,7 +5,7 @@
         :hide-details="details ? true : 'auto'"
         :prepend-inner-icon="icon"
         :class="classes"
-        @input="search()"
+        @input="$emit('input', this.input)"
     ></v-text-field>
 </template>
 
@@ -34,12 +34,6 @@
 
         data: () => ({
             input: ''
-        }),
-
-        methods: {
-            search() {
-                this.$emit('input', this.input);
-            }
-        }
+        })
     };
 </script>

@@ -40,7 +40,9 @@
             }),
 
             handle_click_call(click) {
-                this[click]();
+                if (this.toString.call(this[click]) === '[object Function]') {
+                    this[click]();
+                }
             },
 
             doLogout() {

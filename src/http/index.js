@@ -41,6 +41,10 @@ http.interceptors.response.use(function (response) {
         data.code = error.response.status;
         data.original = error.response;
 
+        if (data.code == 401) {
+            window.location.href = "/auth/login";
+        }
+
         if (data.code == 422 && Object.keys(data.errors).length !== 0) {
             data.message = data.errors[Object.keys(data.errors)[0]][0];
         }
