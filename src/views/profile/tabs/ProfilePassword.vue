@@ -57,12 +57,8 @@
 </template>
 
 <script>
-    import { required, sameAs, helpers } from "vuelidate/lib/validators";
-
-    const password = helpers.regex(
-        "password",
-        /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[\W|_])(?=.{8}).*$/
-    );
+    import { required, sameAs } from "vuelidate/lib/validators";
+    import { password } from "@/rules";
 
     export default {
         name: "ProfilePassword",
