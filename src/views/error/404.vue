@@ -5,7 +5,9 @@
                 <h1 class="error-title error--text">404</h1>
                 <h3 class="text-uppercase error-subtitle">PAGE NOT FOUND !</h3>
                 <p class="text-muted mt-4 mb-4">YOU SEEM TO BE TRYING TO FIND HIS WAY HOME</p>
-                <v-btn color="info" href="/dashboards/analytical">Go to Home</v-btn>
+                <router-link :to="{name: 'home'}">
+                    <v-btn color="info">Go to Home</v-btn>
+                </router-link>
             </div>
         </div>
     </div>
