@@ -15,7 +15,6 @@
                             label="Idioma"
                             prepend-icon="mdi-translate"
                             return-object
-                            :rules="$validate(['required'])"
                         ></v-select>
                     </v-col>
                 </v-row>
@@ -40,7 +39,7 @@
         },
 
         data: () => ({
-            languages: [],
+            languages: []
         }),
 
         created() {
