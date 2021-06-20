@@ -16,7 +16,7 @@
         <v-main>
             <v-container fluid class="page-wrapper">
                 <!-- Breadcrumb part -->
-                <BaseBreadcrumb></BaseBreadcrumb>
+                <Breadcrumb></Breadcrumb>
 
                 <!-- Page Content part -->
                 <router-view />
@@ -56,7 +56,7 @@
     import Sidebar from "./sidebar/Sidebar";
     import Footer from "./footer/Footer";
     import Customizer from "./customizer/Customizer";
-    import BaseBreadcrumb from "@/components/commonComponents/BaseBreadcrumb";
+    import Breadcrumb from "./breadcrumb/Breadcrumb";
     import { mapState, mapMutations } from "vuex";
 
     export default {
@@ -67,7 +67,7 @@
             Sidebar,
             Footer,
             Customizer,
-            BaseBreadcrumb
+            Breadcrumb
         },
 
         props: {

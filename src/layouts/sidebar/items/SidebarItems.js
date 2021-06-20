@@ -5,11 +5,6 @@ export default [
         to: { name: "home" },
     },
     {
-        title: "Usuários",
-        icon: "fas fa-user",
-        to: { name: "users" },
-    },
-    {
         title: "Funcionários",
         icon: "fas fa-user-tie",
         to: { name: "employees" },
