@@ -31,13 +31,17 @@
         },
 
         data: () => ({
-            items: SidebarItems
+            items: []
         }),
 
         watch: {
             "$vuetify.breakpoint.smAndDown"(val) {
                 this.$emit("update:expandOnHover", !val);
             }
+        },
+
+        mounted() {
+            this.items = SidebarItems.filter((item) => !item.privilege || this.$store.getters.user.can(item.privilege));
         }
     };
 </script>

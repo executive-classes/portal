@@ -1,14 +1,18 @@
 import moment from "moment";
 import Vue from "vue";
 import Vuex from "vuex";
+import User from "@/domain/user/User";
+import createPersistedState from "vuex-persistedstate";
+import * as Cookies from 'js-cookie'
 
 Vue.use(Vuex);
 
 export default new Vuex.Store({
     state: {
-        token: localStorage.getItem('token'),
-        tokenEndTime: localStorage.getItem('tokenEndTime'),
-        user: localStorage.getItem('user'),
+        token: null,
+        tokenEndTime: null,
+        user: {},
+        privileges: {},
         Sidebar_drawer: null,
         Customizer_drawer: false,
         useCustomizer: false,
@@ -23,23 +27,19 @@ export default new Vuex.Store({
 
     mutations: {
         LOGIN(state, data) {
-            state.token = data.token;
-            state.tokenEndTime = data.expires;
+            state.token = data.plainTextToken;
+            state.tokenEndTime = data.accessToken.expires_at;
             state.user = data.user;
-            localStorage.setItem('token', data.token)
-            localStorage.setItem('tokenEndTime', data.expires)
-            localStorage.setItem('user', data.user)
+            state.privileges = data.accessToken.abilities;
         },
         LOGOUT(state) {
             state.token = null;
             state.tokenEndTime = null;
             state.user = {};
-            localStorage.removeItem('token')
-            localStorage.removeItem('tokenEndTime')
-            localStorage.removeItem('user')
+            state.privileges = {};
         },
         TOKEN_LIVES(state) {
-            if(moment().isAfter(state.tokenEndTime)) {
+            if (moment().isAfter(state.tokenEndTime)) {
                 this.commit('LOGOUT');
             }
         },
@@ -74,6 +74,13 @@ export default new Vuex.Store({
     getters: {
         logged: state => state.token != null,
         token: state => state.token,
-        user: state => state.user
+        user: state => new User(state.user, state.privileges)
     },
+
+    plugins: [
+        createPersistedState({
+            getState: (key) => Cookies.getJSON(key),
+            setState: (key, state) => Cookies.set(key, state, { expires: 3, secure: true })
+        })
+    ]
 });

@@ -92,11 +92,7 @@
                             language: this.lang
                         })
                         .then(response => {
-                            this.login({
-                                token: response.data.plainTextToken,
-                                user: response.data.user,
-                                expires: response.data.accessToken.expires_at
-                            });
+                            this.login(response.data);
                             this.$router.push({ name: "home" });
                         })
                         .catch(error => this.alert.error(error.message));

@@ -2,9 +2,9 @@
     <div class="error-box blue-grey lighten-5">
         <div class="py-12">
             <div class="text-center">
-                <h1 class="error-title error--text">404</h1>
-                <h3 class="text-uppercase error-subtitle">PAGE NOT FOUND !</h3>
-                <p class="text-muted mt-4 mb-4">YOU SEEM TO BE TRYING TO FIND HIS WAY HOME</p>
+                <h1 class="error-title error--text">403</h1>
+                <h3 class="text-uppercase error-subtitle">UNAUTHORIZED!</h3>
+                <p class="text-muted mt-4 mb-4">YOU SHOULD NOT BE IN HERE.</p>
                 <router-link :to="{name: 'home'}">
                     <v-btn color="info">Go to Home</v-btn>
                 </router-link>
@@ -15,7 +15,7 @@
 
 <script>
     export default {
-        name: "404",
+        name: "Unauthorized",
         data: () => ({})
     };
 </script>

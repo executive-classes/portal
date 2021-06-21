@@ -1,13 +1,26 @@
 import http from '@/http';
 
 export default class User {
-    constructor(data) {
+    constructor(data, privileges = null) {
         Object.entries(data).forEach(([key, value]) => {
             this[key] = value;
         });
 
+        if (toString.call(privileges) == "[object Array]") {
+            this._privileges = privileges;
+        }
+
         this.uf = null;
         this._original = data;
+    }
+
+    /**
+     * Test if a user have a privilege.
+     * 
+     * @param {String} privilege 
+     */
+    can(privilege) {
+        return this._privileges.includes('*') || this._privileges.includes(privilege);
     }
 
     /**
@@ -129,9 +142,9 @@ export default class User {
                 tax_type_id: this.tax_type.id,
                 tax_code: this.tax_code
             };
-            
+
         }
-        
+
         // Set the Tax Alt data.
         data = this._sanitizeTaxAlt(data);
 
@@ -177,7 +190,7 @@ export default class User {
         if (!this.password) {
             return {}
         }
-        
+
         return {
             password: this.password
         };

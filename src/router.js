@@ -43,32 +43,50 @@ const router = new Router({
                     path: "employees",
                     name: "employees",
                     component: () => import("@/views/employees/Employees"),
+                    meta: {
+                        privilege: 'employee:get'
+                    }
                 },
                 {
                     path: "employees/:id",
                     name: "employee",
                     component: () => import("@/views/employees/Employee"),
+                    meta: {
+                        privilege: 'employee:get'
+                    }
                 },
                 {
                     path: "teachers",
                     name: "teachers",
                     component: () => import("@/views/teachers/Teachers"),
+                    meta: {
+                        privilege: 'teacher:get'
+                    }
                 },
                 {
                     path: "teachers/:id",
                     name: "teacher",
                     component: () => import("@/views/teachers/Teacher"),
+                    meta: {
+                        privilege: 'teacher:get'
+                    }
                 },
                 {
                     path: "students",
                     name: "students",
                     component: () => import("@/views/students/Students"),
+                    meta: {
+                        privilege: 'student:get'
+                    }
                 },
                 {
                     path: "bugs",
                     name: "bugs",
                     component: () => import("@/views/bugs/Bugs"),
-                },
+                    meta: {
+                        privilege: 'buglog:get'
+                    }
+                }
             ],
         },
         {
@@ -104,8 +122,13 @@ const router = new Router({
             ],
         },
         {
+            path: "/unauthorized",
+            name: "unauthorized",
+            component: () => import("@/views/error/Unauthorized")
+        },
+        {
             path: "*",
-            component: () => import("@/views/error/404"),
+            component: () => import("@/views/error/NotFound"),
         },
     ],
 });
@@ -117,13 +140,19 @@ const router = new Router({
 import store from "@/store";
 
 router.beforeEach((to, from, next) => {
-
     // Check if the token is still valid.
     store.commit('TOKEN_LIVES');
 
-    // Redirect to login if the user is not authenticate.
-    if (!to.meta.public && !store.getters.logged) {
-        return next({ name: 'login' });
+    if (!to.meta.public) {
+        // Redirect to login if the user is not authenticate.
+        if (!store.getters.logged) {
+            return next({ name: 'login' });
+        }
+
+        // Redirect if the access was unauthorized.
+        if (to.meta.privilege != undefined && !store.getters.user.can(to.meta.privilege)) {
+            return next({ name: 'unauthorized' });
+        }
     }
 
     next();
