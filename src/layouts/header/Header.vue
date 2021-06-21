@@ -38,7 +38,7 @@
                     this.SET_LAPTOP_LAYOUT();
                 }
 
-                return this.$vuetify.breakpoint.smAndDown;
+                return true;
             }
         },
 

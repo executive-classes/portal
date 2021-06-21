@@ -1,9 +1,22 @@
 <template>
     <div>
-        <h1>Executive Classes</h1>
+        <h1>Bem vindo {{user.name}}</h1>
     </div>
 </template>
 
 <script>
-    export default {};
+    export default {
+        name: "Dashboard",
+
+        data: () => ({
+            user: {}
+        }),
+
+        created() {
+            this.user = this.$store.getters.user;
+        }
+    };
 </script>
+
+<style>
+</style>

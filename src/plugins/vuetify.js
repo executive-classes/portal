@@ -7,6 +7,7 @@ Vue.use(Vuetify);
 const ligthTheme = {
     primary: "#293176",
     secondary: "#1d203e",
+    alternative: "#891919",
     default: "#eef5f9",
     info: "#1e88e5",
     success: "#21c1d6",
@@ -23,6 +24,7 @@ const ligthTheme = {
 const darkTheme = {
     primary: "#293176",
     secondary: "#1d203e",
+    alternative: "#891919",
     default: "#891919",
     info: "#1e88e5",
     success: "#21c1d6",

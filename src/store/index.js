@@ -18,7 +18,7 @@ export default new Vuex.Store({
         useCustomizer: false,
         SidebarBg: "",
         SidebarColor: "secondary",
-        navbarColor: "default",
+        navbarColor: "alternative",
         setHorizontalLayout: true,
         hasFooter: false,
         showLogo: true,
@@ -65,7 +65,7 @@ export default new Vuex.Store({
             state.navbarColor = "secondary";
         },
         SET_LAPTOP_LAYOUT(state) {
-            state.navbarColor = "default";
+            state.navbarColor = "alternative";
         },
     },
 
