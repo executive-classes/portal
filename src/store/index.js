@@ -63,9 +63,11 @@ export default new Vuex.Store({
         },
         SET_MOBILE_LAYOUT(state) {
             state.navbarColor = "secondary";
+            state.showLogo = false;
         },
         SET_LAPTOP_LAYOUT(state) {
             state.navbarColor = "alternative";
+            state.showLogo = true;
         },
     },
 
