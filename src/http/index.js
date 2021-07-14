@@ -1,6 +1,7 @@
 import axios from 'axios';
 import store from '@/store';
 
+// Create the Request base headers and URL.
 const http = axios.create({
     baseURL: 'http://api.executiveclasses.local/api',
     headers: {
@@ -10,12 +11,64 @@ const http = axios.create({
     }
 });
 
+// Format the request log.
+const logRequest = config => {
+    if (process.env.NODE_ENV == 'development') {
+        let label = `API Request: ${config.url}: ${config.method.toUpperCase()}`;
+        console.groupCollapsed(label);
+
+        console.groupCollapsed('Headers');
+        console.table(config.headers);
+        console.groupEnd('Headers');
+
+        console.group('Data');
+        console.table(config.data);
+        console.groupEnd('Data');
+
+        console.log(config);
+
+        console.groupEnd(label);
+    }
+};
+
+// Formart the response log.
+const logResponse = (response, data) => {
+    if (process.env.NODE_ENV == 'development') {
+        let label = `API Response: ${response.config.url}: ${response.status} (${response.statusText})`;
+
+        console.groupCollapsed(label);
+
+        console.log('Status:', data.status);
+
+        console.group('Data');
+        console.table(data.data);
+        console.groupEnd('Data');
+
+        Object.entries(data).forEach(([key, value]) => {
+            if (!['status', 'data', 'original'].includes(key)) {
+                console.groupCollapsed(key);
+                console.table(value);
+                console.groupEnd(key);
+            }
+        });
+
+        console.log(data);
+
+        console.groupEnd(label);
+    }
+};
+
 // Interceptors for the request
 http.interceptors.request.use(function (config) {
     // Add the token to the request.
     const token = store.getters.token;
     if (token) {
         config.headers.Authorization = `Bearer ${token}`
+    }
+
+    // Log the request.
+    if (process.env.NODE_ENV == 'development') {
+        logRequest(config);
     }
 
     return config;
@@ -28,6 +81,11 @@ http.interceptors.response.use(function (response) {
     // Format the data from the response.
     let data = response.data;
     data.original = response;
+
+    // Log the response.
+    if (process.env.NODE_ENV == 'development') {
+        logResponse(response, data);
+    }
 
     return data;
 }, function (error) {

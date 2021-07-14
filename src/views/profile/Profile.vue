@@ -1,8 +1,8 @@
 <template>
     <base-card :title="user.name" icon="fa-user">
-        <base-alert :alert="alert"></base-alert>
+        <base-alert></base-alert>
 
-        <v-tabs :vertical="vertical">
+        <base-tabs>
             <v-tab>
                 <v-icon left>fa-id-card</v-icon>Dados
             </v-tab>
@@ -17,77 +17,84 @@
             </v-tab>
 
             <v-tab-item>
-                <ProfileData :user="user" @submit="submit($event)"></ProfileData>
+                <base-form
+                    name="profileData"
+                    :args="{type: 'data'}"
+                    title="Dados de Perfil"
+                    @submit="submit($event)"
+                >
+                    <UserDataFields :user="user" formName="profileData"></UserDataFields>
+                </base-form>
             </v-tab-item>
             <v-tab-item>
-                <ProfileTax :user="user" @submit="submit($event)"></ProfileTax>
+                <base-form
+                    name="profileTax"
+                    :args="{type: 'tax'}"
+                    title="Documentos"
+                    @submit="submit($event)"
+                >
+                    <UserTaxFields :user="user" formName="profileTax"></UserTaxFields>
+                </base-form>
             </v-tab-item>
             <v-tab-item>
-                <ProfilePassword :user="user" @submit="submit($event)"></ProfilePassword>
+                <base-form
+                    name="profilePassword"
+                    :args="{type: 'password'}"
+                    title="Alterar senha"
+                    @submit="submit($event)"
+                >
+                    <UserPasswordFields :user="user" formName="profilePassword"></UserPasswordFields>
+                </base-form>
             </v-tab-item>
             <v-tab-item>
-                <ProfileSettings :user="user" @submit="submit($event)"></ProfileSettings>
+                <base-form
+                    name="profileSettings"
+                    :args="{type: 'settings'}"
+                    title="Configurações de sistema"
+                    @submit="submit($event)"
+                >
+                    <UserSettingsFields :user="user"></UserSettingsFields>
+                </base-form>
             </v-tab-item>
-        </v-tabs>
+        </base-tabs>
     </base-card>
 </template>
 
 <script>
-    import ProfileData from "./tabs/ProfileData";
-    import ProfileTax from "./tabs/ProfileTax";
-    import ProfilePassword from "./tabs/ProfilePassword";
-    import ProfileSettings from "./tabs/ProfileSettings";
-    import Alert from "@/domain/alert/Alert";
-    import User from "@/domain/user/User";
+    import UserDataFields from "@/components/appComponents/userComponents/UserDataFields";
+    import UserTaxFields from "@/components/appComponents/userComponents/UserTaxFields";
+    import UserPasswordFields from "@/components/appComponents/userComponents/UserPasswordFields";
+    import UserSettingsFields from "@/components/appComponents/userComponents/UserSettingsFields";
+    import Profile from "@/domain/user/Profile";
 
     export default {
         name: "Profile",
 
         components: {
-            ProfileData,
-            ProfileTax,
-            ProfilePassword,
-            ProfileSettings
+            UserDataFields,
+            UserTaxFields,
+            UserPasswordFields,
+            UserSettingsFields
         },
 
         data: () => ({
-            user: {},
-            alert: new Alert()
+            user: new Profile()
         }),
-
-        computed: {
-            vertical() {
-                if (["xs", "sm"].includes(this.$vuetify.breakpoint.name)) {
-                    return false;
-                }
-
-                return true;
-            }
-        },
 
         methods: {
             submit(action) {
                 this.user
-                    .update(action)
-                    .then(response => {
-                        this.user = new User(response.data);
-                        this.alert.success("Dados atualizados.");
-                    })
-                    .catch(error => this.alert.error(error.message));
+                    .update(action.type)
+                    .then(() => this.$alert.success("Dados atualizados."))
+                    .catch(error => this.$alert.error(error.message));
             }
         },
 
         created() {
             this.$http
                 .get("profile")
-                .then(response => (this.user = new User(response.data)))
-                .catch(error => this.alert.error(error.message));
+                .then(response => this.user.fill(response.data))
+                .catch(error => this.$alert.error(error.message));
         }
     };
 </script>
-
-<style>
-    .v-tab {
-        justify-content: start;
-    }
-</style>

@@ -1,33 +1,39 @@
 export default {
-    home: {
+    "home": {
         text: "Home",
         exact: true,
         to: { name: "home" },
         parent: null,
     },
-    dashboard: {
+    "dashboard": {
         text: "Dashboard",
         exact: true,
         to: { name: "dashboard" },
         parent: 'home',
     },
-    profile: {
+    "profile": {
         text: "Perfil",
         exact: true,
         to: { name: "profile" },
         parent: 'home',
     },
-    employees: {
+    "employees.list": {
         text: "Funcionários",
         exact: true,
-        to: { name: "employees" },
+        to: { name: "employees.list" },
         parent: 'home',
     },
-    employee: {
+    "employees.show": {
         text: "Funcionário",
         exact: true,
-        to: { name: "employee" },
-        parent: 'employees',
+        to: { name: "employees.show" },
+        parent: 'employees.list',
+    },
+    "employees.create": {
+        text: "Novo Funcionário",
+        exact: true,
+        to: { name: "employees.create" },
+        parent: 'employees.list',
     },
     teachers: {
         text: "Professores",
@@ -47,10 +53,10 @@ export default {
         to: { name: "students" },
         parent: 'home',
     },
-    bugs: {
+    "bugs.list": {
         text: "Bugs",
         exact: true,
-        to: { name: "bugs" },
+        to: { name: "bugs.list" },
         parent: 'home',
     },
 };

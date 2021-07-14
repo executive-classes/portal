@@ -1,20 +1,10 @@
 <template>
     <base-card title="Professores" icon="fa-chalkboard-teacher">
-        <base-alert :type="type" :alert="alert" :message="message"></base-alert>
+        <base-alert></base-alert>
 
-        <span slot="header">
-            <SearchInput
-                :search="search"
-                classes="mt-3"
-                :details="false"
-                @input="input => this.search = input"
-            ></SearchInput>
-        </span>
-
-        <v-data-table
+        <base-table
             :headers="headers"
             :items="teachers"
-            :search="search"
             :sort-by="['id']"
             :loading="loading"
         >
@@ -23,23 +13,14 @@
                     <v-icon small class="mr-2">mdi-pencil</v-icon>
                 </router-link>
             </template>
-        </v-data-table>
+        </base-table>
     </base-card>
 </template>
 
 <script>
-    import BaseAlert from "@/components/commonComponents/BaseAlert";
-    import BaseCard from "@/components/commonComponents/BaseCard";
-    import SearchInput from "@/components/tableComponents/SearchInput";
 
     export default {
         name: "Teachers",
-
-        components: {
-            BaseAlert,
-            BaseCard,
-            SearchInput
-        },
 
         data: () => ({
             headers: [
@@ -50,19 +31,8 @@
                 { text: "Ações", value: "actions" }
             ],
             teachers: [],
-            search: "",
             loading: true,
-            type: "danger",
-            alert: false,
-            message: ""
         }),
-
-        methods: {
-            error(message) {
-                this.alert = true;
-                this.message = message;
-            },
-        },
 
         created() {
             this.$http
@@ -71,7 +41,7 @@
                     this.teachers = response.data;
                     this.loading = false;
                 })
-                .catch(error => this.error(error.message));
+                .catch(error => this.$alert.error(error.message));
         }
     }
 </script>

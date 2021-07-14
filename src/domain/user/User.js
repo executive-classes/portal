@@ -1,80 +1,113 @@
 import http from '@/http';
+import Model from '../model/Model';
 
-export default class User {
-    constructor(data, privileges = null) {
-        Object.entries(data).forEach(([key, value]) => {
-            this[key] = value;
-        });
+export default class User extends Model {
+    constructor(data = {}, props = []) {
+        props.push(
+            'id',
+            'created_at',
+            'updated_at',
+            'inactive_at',
+            'reactive_at',
+            'status',
+            'active',
+            'email',
+            'email_verified',
+            'name',
+            'phone',
+            'phone_alt',
+            'tax_type',
+            'tax_code',
+            'tax_type_alt',
+            'tax_code_alt',
+            'language'
+        );
 
+        super(data, props, 'id');
+    }
+
+    /**
+     * Define the custom properties.
+     *
+     * @param {Object} data
+     */
+    _customProperties() {
+        this.uf = null;
+    }
+
+    /**
+     * Define the user's privileges.
+     * 
+     * @param {Array} privileges 
+     * @returns This
+     */
+    withPrivileges(privileges = []) {
         if (toString.call(privileges) == "[object Array]") {
             this._privileges = privileges;
         }
 
-        this.uf = null;
-        this._original = data;
+        return this;
     }
 
     /**
      * Test if a user have a privilege.
      * 
      * @param {String} privilege 
+     * @returns Boolean
      */
     can(privilege) {
         return this._privileges.includes('*') || this._privileges.includes(privilege);
     }
 
     /**
-     * Update the user.
+     * Search a user by a email.
      * 
-     * @param {String, null} action 
+     * @param {String} email 
      * @returns Promise
      */
-    update(action = null) {
-        if (action) {
-            action = 'update' + String.capitalize(action);
+    searchByEmail(email) {
+        return this._search({ email: email });
+    }
 
-            if (typeof this[action] == 'function') {
-                return this[action]();
-            }
+    /**
+     * Search by a user.
+     * 
+     * @param {String} email 
+     * @returns Promise
+     */
+    _search(data) {
+        if (data.id) {
+            return http.get(`users/${data.id}`)
+                .then(data => {
+                    this.fill(data.data);
+                    return Promise.resolve(data);
+                })
+                .catch(error => Promise.reject(error));
         }
 
-        return this._put(this._sanitizeUser());
+        return http.get(`users`, { params: data })
+            .then(data => {
+                if (data.data[0] != undefined) {
+                    this.fill(data.data[0]);
+                }
+                return Promise.resolve(data);
+            })
+            .catch(error => Promise.reject(error));
     }
 
     /**
-     * Update the user data.
-     * 
+     * Make the POST request with the model data.
+     *
+     * @param {Object} data
      * @returns Promise
      */
-    updateData() {
-        return this._put(this._sanitizeData());
-    }
-
-    /**
-     * Update the user taxes.
-     * 
-     * @returns Promise
-     */
-    updateTax() {
-        return this._put(this._sanitizeTax());
-    }
-
-    /**
-     * Update the user password.
-     * 
-     * @returns Promise
-     */
-    updatePassword() {
-        return this._put(this._sanitizePassword());
-    }
-
-    /**
-     * Update the user settings.
-     * 
-     * @returns Promise
-     */
-    updateSettings() {
-        return this._put(this._sanitizeSettings());
+    _create(data) {
+        return http.post(`users`, data)
+            .then(data => {
+                this.fill(data.data);
+                return Promise.resolve(data);
+            })
+            .catch(error => Promise.reject(error));
     }
 
     /**
@@ -83,11 +116,13 @@ export default class User {
      * @param {Object} data 
      * @returns Promise
      */
-    _put(data) {
-        /** @todo Remove */
-        console.table(data);
-
-        return http.put("profile", data)
+    _update(data) {
+        return http.put(`users/${this.id}`, data)
+            .then(data => {
+                this.fill(data.data);
+                return Promise.resolve(data);
+            })
+            .catch(error => Promise.reject(error));
     }
 
     /**
@@ -96,13 +131,21 @@ export default class User {
      * 
      * @returns Object
      */
-    _sanitizeUser() {
+    _sanitize() {
         return {
             ...this._sanitizeData(),
             ...this._sanitizeTax(),
-            ...this._sanitizePassword(),
             ...this._sanitizeSettings()
         }
+    }
+
+    /**
+     * Update the user data.
+     * 
+     * @returns Promise
+     */
+    updateData() {
+        return this._update(this._sanitizeData());
     }
 
     /**
@@ -111,20 +154,21 @@ export default class User {
      * @returns Object
      */
     _sanitizeData() {
-        let data = {
-            name: this.name,
-            phone: this.phone,
-            phone_alt: this.phone_alt
+        return {
+            ... this.email && this.email != this._original.email ? { email: this.email } : {},
+            ... this.name && this.name != this._original.name ? { name: this.name } : {},
+            ... this.phone !== undefined ? { phone: this.phone } : {},
+            ... this.phone_alt !== undefined ? { phone_alt: this.phone_alt } : {},
         };
+    }
 
-        if (this.email != this._original.email) {
-            data = {
-                ...data,
-                email: this.email
-            };
-        }
-
-        return data;
+    /**
+     * Update the user taxes.
+     *
+     * @returns Promise
+     */
+    updateTax() {
+        return this._update(this._sanitizeTax());
     }
 
     /**
@@ -133,67 +177,36 @@ export default class User {
      * @returns Object
      */
     _sanitizeTax() {
-        let data = {};
-
-        // Set the Tax data.
-        if (this.tax_type) {
-            data = {
-                ...data,
-                tax_type_id: this.tax_type.id,
-                tax_code: this.tax_code
-            };
-
-        }
-
-        // Set the Tax Alt data.
-        data = this._sanitizeTaxAlt(data);
-
-        // Set the UF data.
-        if (this.uf) {
-            data = {
-                ...data,
-                uf: this.uf.short_name
-            }
-        }
-
-        return data;
-    }
-
-    /**
-     * Sanitize the user alt tax data to the API request.
-     * 
-     * @param {Object} data 
-     * @returns Object
-     */
-    _sanitizeTaxAlt(data) {
-        let tax_type_alt_id = null
-        let tax_code_alt = null
-
-        if (this.tax_type_alt && this.tax_type_alt.id != null) {
-            tax_type_alt_id = this.tax_type_alt.id;
-            tax_code_alt = this.tax_code_alt;
-        }
-
         return {
-            ...data,
-            tax_type_alt_id: tax_type_alt_id,
-            tax_code_alt: tax_code_alt
+            ... this.tax_type && this.tax_code
+                ? {
+                    tax_type_id: this.tax_type.id,
+                    tax_code: this.tax_code
+                } : {},
+
+            ... this.tax_type_alt !== undefined && this.tax_code_alt !== undefined
+                ? (
+                    this.tax_type_alt && this.tax_type_alt.id != null
+                        ? {
+                            tax_type_alt_id: this.tax_type_alt.id,
+                            tax_code_alt: this.tax_code_alt
+                        } : {
+                            tax_type_alt_id: null,
+                            tax_code_alt: null
+                        }
+                ) : {},
+
+            ... this.uf ? { uf: this.uf.short_name } : {}
         };
     }
 
     /**
-     * Sanitize the user password to the API request.
+     * Update the user settings.
      * 
-     * @returns Object
+     * @returns Promise
      */
-    _sanitizePassword() {
-        if (!this.password) {
-            return {}
-        }
-
-        return {
-            password: this.password
-        };
+    updateSettings() {
+        return this._update(this._sanitizeSettings());
     }
 
     /**
@@ -203,8 +216,7 @@ export default class User {
      */
     _sanitizeSettings() {
         return {
-            system_language_id: this.language.id
+            ... this.language ? { system_language_id: this.language.id } : {}
         }
     }
-
 }

@@ -1,10 +1,13 @@
 <template>
     <base-card :title="employee.name" icon="fa-user-tie">
-        <base-alert :type="type" :alert="alert" :message="message"></base-alert>
+        <base-alert></base-alert>
 
-        <v-tabs :vertical="vertical">
+        <base-tabs>
             <v-tab>
                 <v-icon left>fa-id-card</v-icon>Dados
+            </v-tab>
+            <v-tab>
+                <v-icon left>fa-file-alt</v-icon>Documentos
             </v-tab>
             <v-tab>
                 <v-icon left>fa-toggle-on</v-icon>Mudar Status
@@ -12,78 +15,104 @@
             <v-tab>
                 <v-icon left>fa-user-edit</v-icon>Mudar Cargo
             </v-tab>
+            <v-tab>
+                <v-icon left>fa-cog</v-icon>Mudar Configurações
+            </v-tab>
 
             <v-tab-item>
-                <EmployeeData :employee="employee" @submit="submit()"></EmployeeData>
+                <base-form
+                    name="employeeData"
+                    :args="{type: 'data'}"
+                    title="Dados de Perfil"
+                    @submit="submit($event)"
+                >
+                    <EmployeeTimestampsFields :employee="employee"></EmployeeTimestampsFields>
+                    <UserDataFields :user="employee.user" formName="employeeData"></UserDataFields>
+                </base-form>
             </v-tab-item>
             <v-tab-item>
-                <EmployeeStatus :employee="employee" @submit="submit()"></EmployeeStatus>
+                <base-form
+                    name="employeeTax"
+                    :args="{type: 'tax'}"
+                    title="Documentos"
+                    @submit="submit($event)"
+                >
+                    <UserTaxFields :user="employee.user" formName="employeeTax"></UserTaxFields>
+                </base-form>
             </v-tab-item>
             <v-tab-item>
-                <EmployeePosition :employee="employee" @submit="submit()"></EmployeePosition>
+                <base-form
+                    name="employeeStatus"
+                    :args="{type: 'status'}"
+                    title="Mudar Status"
+                    @submit="submit($event)"
+                >
+                    <EmployeeStatusFields :employee="employee"></EmployeeStatusFields>
+                </base-form>
             </v-tab-item>
-        </v-tabs>
+            <v-tab-item>
+                <base-form
+                    name="employeePosition"
+                    :args="{type: 'status'}"
+                    title="Mudar cargo"
+                    @submit="submit($event)"
+                >
+                    <EmployeePositionFields :employee="employee"></EmployeePositionFields>
+                </base-form>
+            </v-tab-item>
+            <v-tab-item>
+                <base-form
+                    name="employeeSettings"
+                    :args="{type: 'settings'}"
+                    title="Configurações de sistema"
+                    @submit="submit($event)"
+                >
+                    <UserSettingsFields :user="employee.user"></UserSettingsFields>
+                </base-form>
+            </v-tab-item>
+        </base-tabs>
     </base-card>
 </template>
 
 <script>
-    import EmployeeData from "./tabs/EmployeeData";
-    import EmployeeStatus from "./tabs/EmployeeStatus";
-    import EmployeePosition from "./tabs/EmployeePosition";
+    import UserDataFields from "@/components/appComponents/userComponents/UserDataFields";
+    import UserTaxFields from "@/components/appComponents/userComponents/UserTaxFields";
+    import UserSettingsFields from "@/components/appComponents/userComponents/UserSettingsFields";
+    import EmployeeTimestampsFields from "@/components/appComponents/employeeComponents/EmployeeTimestampsFields";
+    import EmployeeStatusFields from "../../components/appComponents/employeeComponents/EmployeeStatusFields";
+    import EmployeePositionFields from "@/components/appComponents/employeeComponents/EmployeePositionFields";
+    import Employee from "@/domain/employee/Employee";
 
     export default {
-        name: "User",
+        name: "Employee",
 
         components: {
-            EmployeeData,
-            EmployeeStatus,
-            EmployeePosition,
+            UserDataFields,
+            UserTaxFields,
+            UserSettingsFields,
+            EmployeeTimestampsFields,
+            EmployeeStatusFields,
+            EmployeePositionFields
         },
 
         data: () => ({
-            employee: {},
-            type: "danger",
-            alert: false,
-            message: ""
+            employee: new Employee()
         }),
 
-        computed: {
-            vertical() {
-                if (["xs", "sm"].includes(this.$vuetify.breakpoint.name)) {
-                    return false;
-                }
-
-                return true;
-            }
-        },
-
         methods: {
-            error(message) {
-                this.type = "danger";
-                this.alert = true;
-                this.message = message;
-            },
-
-            submit() {
-                console.log(this.employee);
-                // this.$http
-                //     .put("employees", this.employee)
-                //     .then(response => (this.employee = response.data))
-                //     .catch(error => this.error(error.message));
+            submit(action) {
+                this.employee
+                    .update(action.type)
+                    .then(() => this.$alert.success("Funcionário atualizado."))
+                    .catch(error => this.$alert.error(error.message));
             }
         },
 
         created() {
             this.$http
                 .get(`employees/${this.$route.params.id}`)
-                .then(response => (this.employee = response.data))
-                .catch(error => this.error(error.message));
+                .then(response => this.employee.fill(response.data))
+                .catch(error => this.$alert.error(error.message));
         }
     };
 </script>
-
-<style>
-    .v-tab {
-        justify-content: start;
-    }
-</style>

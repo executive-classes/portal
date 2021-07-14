@@ -1,7 +1,7 @@
 <template>
     <v-row>
         <v-col cols="12" lg="9" xl="6">
-            <base-alert :alert="alert"></base-alert>
+            <base-alert></base-alert>
 
             <h2 class="font-weight-bold my-md-4 primary--text">Acessar Portal</h2>
 
@@ -54,7 +54,6 @@
 
 <script>
     import { mapState, mapMutations } from "vuex";
-    import Alert from "@/domain/alert/Alert";
 
     export default {
         name: "Login",
@@ -64,7 +63,6 @@
             email: "",
             password: "",
             showPassword: false,
-            alert: new Alert(),
             passwordRules: [v => !!v || "Senha é necessária"],
             emailRules: [
                 v => !!v || "E-mail é necessário",
@@ -95,7 +93,7 @@
                             this.login(response.data);
                             this.$router.push({ name: "home" });
                         })
-                        .catch(error => this.alert.error(error.message));
+                        .catch(error => this.$alert.error(error.message));
                 }
             }
         }

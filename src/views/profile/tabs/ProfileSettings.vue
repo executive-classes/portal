@@ -8,13 +8,13 @@
                     <!-- Language -->
                     <v-col cols="12">
                         <v-select
+                            return-object
+                            label="Idioma"
+                            prepend-icon="mdi-translate"
                             v-model="user.language"
                             :items="languages"
                             item-text="name"
                             item-value="id"
-                            label="Idioma"
-                            prepend-icon="mdi-translate"
-                            return-object
                         ></v-select>
                     </v-col>
                 </v-row>

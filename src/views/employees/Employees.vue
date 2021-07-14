@@ -1,81 +1,87 @@
 <template>
     <base-card title="Funcionários" icon="fa-user-tie">
-        <base-alert :type="type" :alert="alert" :message="message"></base-alert>
+        <base-alert></base-alert>
 
         <span slot="header">
-            <SearchInput
-                :search="search"
-                classes="mt-3"
-                :details="false"
-                @input="input => this.search = input"
-            ></SearchInput>
+            <v-btn class="mt-2" text color="primary" :to="{name: 'employees.create'}">
+                <v-icon>mdi-plus</v-icon>Funcionário
+            </v-btn>
         </span>
 
-        <v-data-table
-            :headers="headers"
-            :items="employees"
-            :search="search"
-            :sort-by="['id']"
-            :loading="loading"
-        >
+        <base-table :headers="headers" :items="employees" :sort-by="['id']" :loading="loading">
             <template v-slot:item.actions="{ item }">
-                <router-link :to="{name: 'employee', params: {id: item.id}}">
-                    <v-icon small class="mr-2">mdi-pencil</v-icon>
-                </router-link>
+                <v-btn
+                    icon
+                    color="primary"
+                    :to="{name: 'employees.show', params: {id: item.id}}"
+                    :disabled="item.status.id != 'active'"
+                >
+                    <v-icon small>mdi-pencil</v-icon>
+                </v-btn>
+                <v-btn icon color="danger" @click="cancel(item)" v-if="item.status.id == 'active'">
+                    <v-icon small>mdi-block-helper</v-icon>
+                </v-btn>
+                <v-btn icon color="success" @click="reactivate(item)" v-else>
+                    <v-icon small>mdi-check</v-icon>
+                </v-btn>
             </template>
-        </v-data-table>
+        </base-table>
     </base-card>
 </template>
 
 <script>
-    import BaseAlert from "@/components/commonComponents/BaseAlert";
-    import BaseCard from "@/components/commonComponents/BaseCard";
-    import SearchInput from "@/components/tableComponents/SearchInput";
+    import Employee from "@/domain/employee/Employee";
 
     export default {
         name: "Employees",
 
-        components: {
-            BaseAlert,
-            BaseCard,
-            SearchInput
-        },
-
         data: () => ({
             headers: [
                 { text: "Id", value: "id", sortable: false },
-                { text: "E-Mail", value: "email" },
-                { text: "Nome", value: "name" },
-                { text: "Status", value: "status" },
-                { text: "Cargo", value: "position" },
+                { text: "E-Mail", value: "user.email" },
+                { text: "Nome", value: "user.name" },
+                { text: "Status", value: "status.name" },
+                { text: "Cargo", value: "position.name" },
                 { text: "Ações", value: "actions" }
             ],
             employees: [],
-            search: "",
-            loading: true,
-            type: "danger",
-            alert: false,
-            message: ""
+            loading: true
         }),
 
         methods: {
-            error(message) {
-                this.alert = true;
-                this.message = message;
+            getData() {
+                this.$http
+                    .get("employees")
+                    .then(response => {
+                        this.employees = response.data;
+                        this.loading = false;
+                    })
+                    .catch(error => this.$alert.error(error.message));
+            },
+            cancel(employee) {
+                employee = new Employee(employee);
+                employee
+                    .cancel()
+                    .then(() => {
+                        this.$alert.success("Funcionário cancelado com sucesso!");
+                        this.getData();
+                    })
+                    .catch(error => this.$alert.error(error.message));
+            },
+            reactivate(employee) {
+                employee = new Employee(employee);
+                employee
+                    .reactivate()
+                    .then(() => {
+                        this.$alert.success("Funcionário reativado com sucesso!");
+                        this.getData();
+                    })
+                    .catch(error => this.$alert.error(error.message));
             }
         },
 
         created() {
-            this.$http
-                .get("employees")
-                .then(response => {
-                    this.employees = response.data;
-                    this.loading = false;
-                })
-                .catch(error => this.error(error.message));
+            this.getData();
         }
     };
 </script>
-
-<style>
-</style>

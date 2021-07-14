@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <v-form @submit.prevent="this.$emit('submit');">
+        <v-form @submit.prevent="submit()">
             <v-card-title>Dados de Usuário</v-card-title>
 
             <v-card-text>
@@ -8,34 +8,34 @@
                     <!-- Dates -->
                     <v-col cols="6" md="3">
                         <v-text-field
-                            :value="formatDate(employee.created_at)"
+                            readonly
                             label="Criado em"
                             prepend-icon="mdi-calendar-plus"
-                            readonly
+                            :value="formatDate(employee.created_at)"
                         ></v-text-field>
                     </v-col>
                     <v-col cols="6" md="3">
                         <v-text-field
-                            :value="formatDate(employee.updated_at)"
+                            readonly
                             label="Alterado em"
                             prepend-icon="mdi-calendar-import"
-                            readonly
+                            :value="formatDate(employee.updated_at)"
                         ></v-text-field>
                     </v-col>
                     <v-col cols="6" md="3">
                         <v-text-field
-                            :value="employee.inactive_at != null ? formatDate(employee.inactive_at) : '-'"
+                            readonly
                             label="Suspenso em"
                             prepend-icon="mdi-calendar-remove"
-                            readonly
+                            :value="employee.inactive_at != null ? formatDate(employee.inactive_at) : '-'"
                         ></v-text-field>
                     </v-col>
                     <v-col cols="6" md="3">
                         <v-text-field
-                            :value="employee.reactive_at != null ? formatDate(employee.reactive_at) : '-'"
+                            readonly
                             label="Reativado em"
                             prepend-icon="mdi-calendar-check"
-                            readonly
+                            :value="employee.reactive_at != null ? formatDate(employee.reactive_at) : '-'"
                         ></v-text-field>
                     </v-col>
 
@@ -45,7 +45,10 @@
                             type="email"
                             label="E-Mail"
                             prepend-icon="mdi-email"
-                            :value="employee.email"
+                            v-model="employee.user.email"
+                            :error-messages="errors.email"
+                            @input="$v.employee.user.email.$touch()"
+                            @blur="$v.employee.user.email.$touch()"
                         ></v-text-field>
                     </v-col>
 
@@ -55,64 +58,45 @@
                             type="text"
                             label="Nome"
                             prepend-icon="mdi-card-account-details-outline"
-                            :value="employee.name"
+                            v-model="employee.user.name"
+                            :error-messages="errors.name"
+                            @input="$v.employee.user.name.$touch()"
+                            @blur="$v.employee.user.name.$touch()"
                         ></v-text-field>
                     </v-col>
 
-                    <!-- Tax -->
-                    <v-col cols="5" sm="3" md="2">
-                        <v-select
-                            :items="taxes"
-                            label="Tipo"
-                            prepend-icon="mdi-file-document-outline"
-                            :value="employee.tax_type"
-                        ></v-select>
-                    </v-col>
-                    <v-col cols="7" sm="9" md="4">
-                        <v-text-field type="text" label="Doc" :value="employee.tax_code"></v-text-field>
-                    </v-col>
-
-                    <!-- Tax Alt -->
-                    <v-col cols="5" sm="3" md="2">
-                        <v-select
-                            :items="taxes"
-                            label="Tipo"
-                            prepend-icon="mdi-file-document-outline"
-                            :value="employee.tax_type_alt"
-                        ></v-select>
-                    </v-col>
-                    <v-col cols="7" sm="9" md="4">
-                        <v-text-field type="text" label="Doc" :value="employee.tax_code_alt"></v-text-field>
-                    </v-col>
-
                     <!-- Phones -->
-                    <v-col cols="12" md="4">
+                    <v-col cols="12" md="6">
                         <v-text-field
                             type="text"
                             label="Celular"
                             prepend-icon="mdi-cellphone"
-                            :value="employee.phone"
+                            v-model="employee.user.phone"
+                            v-maska="['(##) ####-####', '(##) #####-####']"
                         ></v-text-field>
                     </v-col>
-                    <v-col cols="12" md="4">
+                    <v-col cols="12" md="6">
                         <v-text-field
                             type="text"
                             label="Telefone"
                             prepend-icon="mdi-phone"
-                            :value="employee.phone_alt"
+                            v-model="employee.user.phone_alt"
+                            v-maska="['(##) ####-####', '(##) #####-####']"
                         ></v-text-field>
                     </v-col>
                 </v-row>
             </v-card-text>
 
             <v-card-actions>
-                <v-btn color="primary" submit rounded text>Salvar alterações</v-btn>
+                <v-btn color="primary" type="submit" rounded text>Salvar alterações</v-btn>
             </v-card-actions>
         </v-form>
     </v-card>
 </template>
 
 <script>
+    import { required, email } from "vuelidate/lib/validators";
+
     export default {
         name: "EmployeeData",
 
@@ -123,18 +107,55 @@
             }
         },
 
-        data: () => ({
-            taxes: []
-        }),
-
-        methods: {
-            formatDate(date) {
-                return this.$moment(date).format("DD/MM/YYYY, HH:mm:ss ");
+        validations: {
+            employee: {
+                user: {
+                    email: {
+                        required,
+                        email
+                    },
+                    name: {
+                        required
+                    }
+                }
             }
         },
 
-        created() {
-            this.$http.get("taxes").then(response => (this.taxes = response.data));
+        computed: {
+            errors() {
+                const errors = {
+                    email: [],
+                    name: []
+                };
+
+                if (this.$v.employee.user.email.$dirty) {
+                    !this.$v.employee.user.email.required &&
+                        errors.email.push("O e-mail é necessário");
+                    !this.$v.employee.user.email.email &&
+                        errors.email.push("O e-mail precisa ser válido");
+                }
+
+                if (this.$v.employee.user.name.$dirty) {
+                    !this.$v.employee.user.name.required &&
+                        errors.name.push("O nome é necessário");
+                }
+
+                return errors;
+            }
+        },
+
+        methods: {
+            submit() {
+                this.$v.$touch();
+                if (!this.$v.$invalid) {
+                    this.$v.$reset();
+                    this.$emit("submit", "data");
+                }
+            },
+
+            formatDate(date) {
+                return this.$moment(date).format("DD/MM/YYYY, HH:mm:ss");
+            }
         }
     };
 </script>

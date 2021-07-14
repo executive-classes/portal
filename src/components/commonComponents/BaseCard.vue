@@ -1,18 +1,32 @@
 <template>
-    <v-card shaped class="mb-7">
-        <v-toolbar flat v-if="title != ''">
-            <v-icon v-if="icon != ''" class="mr-3">{{ icon }}</v-icon>
+    <v-card shaped>
+        <!-- Card header -->
+        <v-toolbar flat v-if="showHeader">
+            <!-- Card icon -->
+            <v-icon v-if="showIcon" class="mr-3">{{ icon }}</v-icon>
+
+            <!-- Card title -->
             <v-toolbar-title>{{ title }}</v-toolbar-title>
 
             <v-spacer></v-spacer>
 
+            <!-- Header additional content -->
             <slot name="header"></slot>
-
         </v-toolbar>
-        <v-divider v-if="title != ''"></v-divider>
-        <div class="pa-4">
+
+        <v-divider v-if="showHeader"></v-divider>
+
+        <!-- Card content -->
+        <v-card-text>
             <slot />
-        </div>
+        </v-card-text>
+
+        <v-divider v-if="showFooter"></v-divider>
+
+        <!-- Card footer -->
+        <v-card-actions v-if="showFooter">
+            <slot name="footer"></slot>
+        </v-card-actions>
     </v-card>
 </template>
 
@@ -31,8 +45,16 @@
             }
         },
 
-        data: () => ({}),
-
-        methods: {}
+        computed: {
+            showHeader() {
+                return this.title != "";
+            },
+            showIcon() {
+                return this.icon != "";
+            },
+            showFooter() {
+                return !!this.$slots.footer;
+            }
+        }
     };
 </script>

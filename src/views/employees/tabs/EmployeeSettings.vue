@@ -1,18 +1,18 @@
 <template>
     <v-card>
-        <v-form @submit.prevent="$emit('submit', 'status');">
-            <v-card-title>Mudar Status</v-card-title>
+        <v-form @submit.prevent="$emit('submit', 'settings')">
+            <v-card-title>Configurações de sistema</v-card-title>
 
             <v-card-text>
                 <v-row>
-                    <!-- Status -->
+                    <!-- Language -->
                     <v-col cols="12">
                         <v-select
                             return-object
-                            label="Status"
-                            prepend-icon="mdi-toggle-switch-outline"
-                            v-model="employee.status"
-                            :items="status"
+                            label="Idioma"
+                            prepend-icon="mdi-translate"
+                            v-model="employee.user.language"
+                            :items="languages"
                             item-text="name"
                             item-value="id"
                         ></v-select>
@@ -29,7 +29,7 @@
 
 <script>
     export default {
-        name: "EmployeeStatus",
+        name: "EmployeeSettings",
 
         props: {
             employee: {
@@ -39,13 +39,13 @@
         },
 
         data: () => ({
-            status: []
+            languages: []
         }),
 
         created() {
-            this.$http.get("employees/status").then(response => {
-                this.status = response.data;
-            });
+            this.$http
+                .get("languages")
+                .then(response => (this.languages = response.data));
         }
     };
 </script>

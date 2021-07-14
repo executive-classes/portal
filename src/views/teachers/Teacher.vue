@@ -1,6 +1,6 @@
 <template>
     <base-card :title="teacher.name" icon="fa-chalkboard-teacher">
-        <base-alert :type="type" :alert="alert" :message="message"></base-alert>
+        <base-alert></base-alert>
 
         <v-tabs :vertical="vertical">
             <v-tab>
@@ -29,14 +29,11 @@
 
         components: {
             TeacherData,
-            TeacherStatus,
+            TeacherStatus
         },
 
         data: () => ({
-            teacher: {},
-            type: "danger",
-            alert: false,
-            message: ""
+            teacher: {}
         }),
 
         computed: {
@@ -50,18 +47,12 @@
         },
 
         methods: {
-            error(message) {
-                this.type = "danger";
-                this.alert = true;
-                this.message = message;
-            },
-
             submit() {
                 console.log(this.teacher);
                 // this.$http
                 //     .put("teachers", this.teacher)
                 //     .then(response => (this.teacher = response.data))
-                //     .catch(error => this.error(error.message));
+                //     .catch(error => this.$alert.error(error.message));
             }
         },
 
@@ -69,7 +60,7 @@
             this.$http
                 .get(`teachers/${this.$route.params.id}`)
                 .then(response => (this.teacher = response.data))
-                .catch(error => this.error(error.message));
+                .catch(error => this.$alert.error(error.message));
         }
     };
 </script>

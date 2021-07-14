@@ -20,13 +20,13 @@
                     <!-- Password -->
                     <v-col cols="12" sm="6">
                         <v-text-field
+                            :type="showPassword ? 'text' : 'password'"
                             label="Senha"
                             prepend-icon="mdi-lock"
-                            v-model="user.password"
                             :append-icon="showPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                            :type="showPassword ? 'text' : 'password'"
-                            @click:append="showPassword = !showPassword"
+                            v-model="user.password"
                             :error-messages="errors.password"
+                            @click:append="showPassword = !showPassword"
                             @input="password_check('password')"
                             @blur="password_check('password')"
                         ></v-text-field>
@@ -35,15 +35,25 @@
                     <!-- Confirm Password -->
                     <v-col cols="12" sm="6">
                         <v-text-field
+                            :type="showConfirmPassword ? 'text' : 'password'"
                             label="Confirme a Senha"
                             prepend-icon="mdi-lock-reset"
-                            v-model="user.confirmPassword"
                             :append-icon="showConfirmPassword ? 'mdi-eye' : 'mdi-eye-off'"
-                            :type="showConfirmPassword ? 'text' : 'password'"
-                            @click:append="showConfirmPassword = !showConfirmPassword"
+                            v-model="user.confirmPassword"
                             :error-messages="errors.confirmPassword"
+                            @click:append="showConfirmPassword = !showConfirmPassword"
                             @input="password_check('confirmPassword')"
                             @blur="password_check('confirmPassword')"
+                        ></v-text-field>
+                    </v-col>
+
+                    <!-- Password Reminder -->
+                    <v-col cols="12">
+                        <v-text-field
+                            type="text"
+                            label="Lembrete de senha"
+                            prepend-icon="mdi-note-outline"
+                            v-model="user.password_reminder"
                         ></v-text-field>
                     </v-col>
                 </v-row>

@@ -1,23 +1,13 @@
 <template>
     <base-card title="Bugs" icon="fa-bug">
-        <base-alert :alert="alert"></base-alert>
+        <base-alert></base-alert>
 
-        <span slot="header">
-            <SearchInput
-                :search="search"
-                classes="mt-3"
-                :details="false"
-                @input="input => this.search = input"
-            ></SearchInput>
-        </span>
-
-        <v-data-table
+        <base-table
             :headers="headers"
             :items="bugs"
-            :search="search"
-            :custom-filter="filter"
-            :sort-by="['date']"
-            :sort-desc="['true']"
+            :customFilter="filter"
+            :sortBy="['date']"
+            :sortDesc="['true']"
             :loading="loading"
         >
             <!-- Date -->
@@ -45,26 +35,19 @@
             <template v-slot:item.error="{item}">
                 <ErrorDialog :error="item.error"></ErrorDialog>
             </template>
-        </v-data-table>
+        </base-table>
     </base-card>
 </template>
 
 <script>
-    import BaseAlert from "@/components/commonComponents/BaseAlert";
-    import BaseCard from "@/components/commonComponents/BaseCard";
-    import SearchInput from "@/components/tableComponents/SearchInput";
-    import RequestDialog from "@/components/bugsComponents/RequestDialog";
-    import DataDialog from "@/components/bugsComponents/DataDialog";
-    import ErrorDialog from "@/components/bugsComponents/ErrorDialog";
-    import Alert from "@/domain/alert/Alert";
+    import RequestDialog from "@/components/appComponents/bugsComponents/RequestDialog";
+    import DataDialog from "@/components/appComponents/bugsComponents/DataDialog";
+    import ErrorDialog from "@/components/appComponents/bugsComponents/ErrorDialog";
 
     export default {
         name: "Bugs",
 
         components: {
-            BaseAlert,
-            BaseCard,
-            SearchInput,
             RequestDialog,
             DataDialog,
             ErrorDialog
@@ -99,17 +82,10 @@
                 }
             ],
             bugs: [],
-            search: "",
-            loading: true,
-            alert: new Alert(),
+            loading: true
         }),
 
         methods: {
-            error(message) {
-                this.alert = true;
-                this.message = message;
-            },
-
             formatDate(date) {
                 return this.$moment(date).format("DD/MM/YYYY, HH:mm:ss ");
             },
@@ -145,7 +121,7 @@
                     this.bugs = response.data;
                     this.loading = false;
                 })
-                .catch(error => this.alert.error(error.message));
+                .catch(error => this.$alert.error(error.message));
         }
     };
 </script>

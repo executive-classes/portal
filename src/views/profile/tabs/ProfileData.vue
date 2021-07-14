@@ -1,6 +1,6 @@
 <template>
     <v-card>
-        <form @submit.prevent="submit()">
+        <v-form @submit.prevent="submit()">
             <v-card-title>Dados de Perfil</v-card-title>
 
             <v-card-text>
@@ -8,10 +8,10 @@
                     <!-- Email -->
                     <v-col cols="12" md="6">
                         <v-text-field
-                            v-model="user.email"
                             type="email"
                             label="E-Mail"
                             prepend-icon="mdi-email"
+                            v-model="user.email"
                             :error-messages="errors.email"
                             @input="$v.user.email.$touch()"
                             @blur="$v.user.email.$touch()"
@@ -21,10 +21,10 @@
                     <!-- Name -->
                     <v-col cols="12" md="6">
                         <v-text-field
-                            v-model="user.name"
                             type="text"
                             label="Nome"
                             prepend-icon="mdi-card-account-details-outline"
+                            v-model="user.name"
                             :error-messages="errors.name"
                             @input="$v.user.name.$touch()"
                             @blur="$v.user.name.$touch()"
@@ -34,20 +34,20 @@
                     <!-- Phones -->
                     <v-col cols="12" md="6">
                         <v-text-field
-                            v-model="user.phone"
-                            v-maska="['(##) ####-####', '(##) #####-####']"
                             type="text"
                             label="Celular"
                             prepend-icon="mdi-cellphone"
+                            v-model="user.phone"
+                            v-maska="['(##) ####-####', '(##) #####-####']"
                         ></v-text-field>
                     </v-col>
                     <v-col cols="12" md="6">
                         <v-text-field
-                            v-model="user.phone_alt"
-                            v-maska="['(##) ####-####', '(##) #####-####']"
                             type="text"
                             label="Telefone"
                             prepend-icon="mdi-phone"
+                            v-model="user.phone_alt"
+                            v-maska="['(##) ####-####', '(##) #####-####']"
                         ></v-text-field>
                     </v-col>
                 </v-row>
@@ -56,7 +56,7 @@
             <v-card-actions>
                 <v-btn color="primary" type="submit" rounded text>Salvar alterações</v-btn>
             </v-card-actions>
-        </form>
+        </v-form>
     </v-card>
 </template>
 

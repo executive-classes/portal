@@ -7,7 +7,7 @@ export default [
     {
         title: "Funcionários",
         icon: "fas fa-user-tie",
-        to: { name: "employees" },
+        to: { name: "employees.list" },
         privilege: 'employee:get'
     },
     {
@@ -25,7 +25,7 @@ export default [
     {
         title: "Bugs",
         icon: "fas fa-bug",
-        to: { name: "bugs" },
+        to: { name: "bugs.list" },
         privilege: 'buglog:get'
     },
 ];

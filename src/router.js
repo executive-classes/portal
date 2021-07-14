@@ -38,21 +38,35 @@ const router = new Router({
                     name: "profile",
                     title: 'Perfil',
                     component: () => import("@/views/profile/Profile"),
+                    meta: {
+                        title: 'Perfil'
+                    }
                 },
                 {
                     path: "employees",
-                    name: "employees",
+                    name: "employees.list",
                     component: () => import("@/views/employees/Employees"),
                     meta: {
-                        privilege: 'employee:get'
+                        privilege: 'employee:get',
+                        title: 'Funcionários'
+                    }
+                },
+                {
+                    path: "employees/new",
+                    name: "employees.create",
+                    component: () => import("@/views/employees/NewEmployee"),
+                    meta: {
+                        privilege: 'employee:create',
+                        title: 'Novo funcionário'
                     }
                 },
                 {
                     path: "employees/:id",
-                    name: "employee",
+                    name: "employees.show",
                     component: () => import("@/views/employees/Employee"),
                     meta: {
-                        privilege: 'employee:get'
+                        privilege: 'employee:get',
+                        title: 'Funcionário'
                     }
                 },
                 {
@@ -60,7 +74,8 @@ const router = new Router({
                     name: "teachers",
                     component: () => import("@/views/teachers/Teachers"),
                     meta: {
-                        privilege: 'teacher:get'
+                        privilege: 'teacher:get',
+                        title: 'Professores'
                     }
                 },
                 {
@@ -68,7 +83,8 @@ const router = new Router({
                     name: "teacher",
                     component: () => import("@/views/teachers/Teacher"),
                     meta: {
-                        privilege: 'teacher:get'
+                        privilege: 'teacher:get',
+                        title: 'Professor'
                     }
                 },
                 {
@@ -76,15 +92,17 @@ const router = new Router({
                     name: "students",
                     component: () => import("@/views/students/Students"),
                     meta: {
-                        privilege: 'student:get'
+                        privilege: 'student:get',
+                        title: 'Alunos'
                     }
                 },
                 {
                     path: "bugs",
-                    name: "bugs",
+                    name: "bugs.list",
                     component: () => import("@/views/bugs/Bugs"),
                     meta: {
-                        privilege: 'buglog:get'
+                        privilege: 'buglog:get',
+                        title: 'Erros'
                     }
                 }
             ],
@@ -132,6 +150,24 @@ const router = new Router({
         },
     ],
 });
+
+/**
+ * Change page title
+ */
+
+const DEFAULT_TITLE = 'Executive Classes';
+
+router.beforeEach((to, from, next) => {
+    let title = DEFAULT_TITLE
+
+    if (to.meta.title) {
+        title = `${to.meta.title} - ${title}`;
+    }
+
+    document.title = title;
+
+    next();
+})
 
 /**
  * Guard for auth

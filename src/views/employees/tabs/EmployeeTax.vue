@@ -11,7 +11,7 @@
                             return-object
                             label="Tipo"
                             prepend-icon="mdi-file-document"
-                            v-model="user.tax_type"
+                            v-model="employee.user.tax_type"
                             :items="taxes"
                             item-text="name"
                             item-value="id"
@@ -24,11 +24,11 @@
                         <v-text-field
                             type="text"
                             label="Doc"
-                            v-model="user.tax_code"
+                            v-model="employee.user.tax_code"
                             v-maska="tax_type_mask"
                             :error-messages="errors.tax_code"
-                            @input="$v.user.tax_code.$touch()"
-                            @blur="$v.user.tax_code.$touch()"
+                            @input="$v.employee.user.tax_code.$touch()"
+                            @blur="$v.employee.user.tax_code.$touch()"
                         ></v-text-field>
                     </v-col>
 
@@ -38,7 +38,7 @@
                             return-object
                             label="Tipo"
                             prepend-icon="mdi-file-document-outline"
-                            v-model="user.tax_type_alt"
+                            v-model="employee.user.tax_type_alt"
                             :items="taxes_alt"
                             item-text="name"
                             item-value="id"
@@ -51,11 +51,11 @@
                         <v-text-field
                             type="text"
                             label="Doc"
-                            v-model="user.tax_code_alt"
+                            v-model="employee.user.tax_code_alt"
                             v-maska="tax_type_alt_mask"
                             :error-messages="errors.tax_code_alt"
-                            @input="$v.user.tax_code_alt.$touch()"
-                            @blur="$v.user.tax_code_alt.$touch()"
+                            @input="$v.employee.user.tax_code_alt.$touch()"
+                            @blur="$v.employee.user.tax_code_alt.$touch()"
                         ></v-text-field>
                     </v-col>
 
@@ -65,13 +65,13 @@
                             return-object
                             label="Estado"
                             prepend-icon="mdi-map"
-                            v-model="user.uf"
+                            v-model="employee.user.uf"
                             :items="states"
                             item-text="name"
                             item-value="short_name"
                             :error-messages="errors.uf"
-                            @change="$v.user.uf.$touch()"
-                            @blur="$v.user.uf.$touch()"
+                            @change="$v.employee.user.uf.$touch()"
+                            @blur="$v.employee.user.uf.$touch()"
                         ></v-select>
                     </v-col>
                 </v-row>
@@ -88,10 +88,10 @@
     import { required, not, requiredIf } from "vuelidate/lib/validators";
 
     export default {
-        name: "ProfileTax",
+        name: "EmployeeTax",
 
         props: {
-            user: {
+            employee: {
                 type: Object,
                 required: true
             }
@@ -110,35 +110,37 @@
         }),
 
         validations: {
-            user: {
-                tax_type: {
-                    required,
-                    different: not(
-                        (type, user) =>
-                            user.tax_type_alt != null &&
-                            type.id == user.tax_type_alt.id
-                    )
-                },
-                tax_code: {
-                    required
-                },
-                tax_type_alt: {
-                    different: not((type, user) => type.id == user.tax_type.id)
-                },
-                tax_code_alt: {
-                    requiredIf: requiredIf(
-                        user =>
-                            user.tax_type_alt != null &&
-                            user.tax_type_alt.id != null
-                    )
-                },
-                uf: {
-                    requiredIf: requiredIf(
-                        user =>
-                            (user.tax_type != null && user.tax_type.id == "ie") ||
-                            (user.tax_type_alt != null &&
-                                user.tax_type_alt.id == "ie")
-                    )
+            employee: {
+                user: {
+                    tax_type: {
+                        required,
+                        different: not(
+                            (type, user) =>
+                                user.tax_type_alt != null &&
+                                type.id == user.tax_type_alt.id
+                        )
+                    },
+                    tax_code: {
+                        required
+                    },
+                    tax_type_alt: {
+                        different: not((type, user) => type.id == user.tax_type.id)
+                    },
+                    tax_code_alt: {
+                        requiredIf: requiredIf(
+                            user =>
+                                user.tax_type_alt != null &&
+                                user.tax_type_alt.id != null
+                        )
+                    },
+                    uf: {
+                        requiredIf: requiredIf(
+                            user =>
+                                (user.tax_type != null && user.tax_type.id == "ie") ||
+                                (user.tax_type_alt != null &&
+                                    user.tax_type_alt.id == "ie")
+                        )
+                    }
                 }
             }
         },
@@ -153,81 +155,81 @@
                     uf: []
                 };
 
-                if (this.$v.user.tax_type.$dirty) {
-                    !this.$v.user.tax_type.required &&
+                if (this.$v.employee.user.tax_type.$dirty) {
+                    !this.$v.employee.user.tax_type.required &&
                         errors.tax_type.push("O tipo é necessário");
-                    !this.$v.user.tax_type.different &&
+                    !this.$v.employee.user.tax_type.different &&
                         errors.tax_type.push("Os tipos devem ser diferentes");
                 }
 
-                if (this.$v.user.tax_code.$dirty) {
-                    !this.$v.user.tax_code.required &&
+                if (this.$v.employee.user.tax_code.$dirty) {
+                    !this.$v.employee.user.tax_code.required &&
                         errors.tax_code.push("O documento é necessário");
                 }
 
-                if (this.$v.user.tax_type_alt.$dirty) {
-                    !this.$v.user.tax_type_alt.different &&
+                if (this.$v.employee.user.tax_type_alt.$dirty) {
+                    !this.$v.employee.user.tax_type_alt.different &&
                         errors.tax_type_alt.push("Os tipos devem ser diferentes");
                 }
 
-                if (this.$v.user.tax_code_alt.$dirty) {
-                    !this.$v.user.tax_code_alt.requiredIf &&
+                if (this.$v.employee.user.tax_code_alt.$dirty) {
+                    !this.$v.employee.user.tax_code_alt.requiredIf &&
                         errors.tax_code_alt.push("O documento é necessário");
                 }
 
-                if (this.$v.user.uf.$dirty) {
-                    !this.$v.user.uf.requiredIf &&
+                if (this.$v.employee.user.uf.$dirty) {
+                    !this.$v.employee.user.uf.requiredIf &&
                         errors.uf.push("O estado é necessário");
                 }
 
                 return errors;
             },
             tax_type_mask() {
-                if (this.user.tax_type == null) {
+                if (this.employee.user.tax_type == null) {
                     return null;
                 }
 
-                if (this.user.tax_type.id == "ie") {
-                    if (this.user.uf == undefined) {
+                if (this.employee.user.tax_type.id == "ie") {
+                    if (this.employee.user.uf == undefined) {
                         return null;
                     }
 
-                    return this.user.uf.ie_mask;
+                    return this.employee.user.uf.ie_mask;
                 }
 
-                return this.user.tax_type.mask;
+                return this.employee.user.tax_type.mask;
             },
             tax_type_alt_mask() {
-                if (this.user.tax_type_alt == null) {
+                if (this.employee.user.tax_type_alt == null) {
                     return null;
                 }
 
-                if (this.user.tax_type_alt.id == "ie") {
-                    if (this.user.uf == undefined) {
+                if (this.employee.user.tax_type_alt.id == "ie") {
+                    if (this.employee.user.uf == undefined) {
                         return null;
                     }
 
-                    return this.user.uf.ie_mask;
+                    return this.employee.user.uf.ie_mask;
                 }
 
-                return this.user.tax_type_alt.mask;
+                return this.employee.user.tax_type_alt.mask;
             },
             has_ie() {
-                if (this.user.tax_type == null && this.user.tax_type_alt == null) {
+                if (this.employee.user.tax_type == null && this.employee.user.tax_type_alt == null) {
                     return false;
                 }
 
-                if (this.user.tax_type_alt == null) {
-                    return this.user.tax_type.id == "ie";
+                if (this.employee.user.tax_type_alt == null) {
+                    return this.employee.user.tax_type.id == "ie";
                 }
 
-                if (this.user.tax_type == null) {
-                    return this.user.tax_type_alt.id == "ie";
+                if (this.employee.user.tax_type == null) {
+                    return this.employee.user.tax_type_alt.id == "ie";
                 }
 
                 return (
-                    this.user.tax_type.id == "ie" ||
-                    this.user.tax_type_alt.id == "ie"
+                    this.employee.user.tax_type.id == "ie" ||
+                    this.employee.user.tax_type_alt.id == "ie"
                 );
             }
         },
@@ -241,14 +243,14 @@
                 }
             },
             tax_type_check(field) {
-                this.$v.user[field].$touch();
+                this.$v.employee.user[field].$touch();
 
-                if (this.$v.user.tax_type.$dirty) {
-                    this.$v.user.tax_type.$touch();
+                if (this.$v.employee.user.tax_type.$dirty) {
+                    this.$v.employee.user.tax_type.$touch();
                 }
 
-                if (this.$v.user.tax_type_alt.$dirty) {
-                    this.$v.user.tax_type_alt.$touch();
+                if (this.$v.employee.user.tax_type_alt.$dirty) {
+                    this.$v.employee.user.tax_type_alt.$touch();
                 }
             }
         },

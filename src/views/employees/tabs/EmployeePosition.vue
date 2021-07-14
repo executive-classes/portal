@@ -1,33 +1,27 @@
 <template>
     <v-card>
-        <v-form @submit.prevent="this.$emit('submit');">
+        <v-form @submit.prevent="$emit('submit', 'position');">
             <v-card-title>Dados de Usuário</v-card-title>
 
             <v-card-text>
                 <v-row>
-                    <!-- Dates -->
-                    <v-col cols="12" md="6">
-                        <v-text-field
-                            :value="employee.position"
-                            label="Cargo"
-                            prepend-icon="mdi-clipboard-account"
-                            readonly
-                        ></v-text-field>
-                    </v-col>
-
-                    <!-- Tax -->
-                    <v-col cols="12" md="6">
+                    <!-- Position -->
+                    <v-col cols="12">
                         <v-select
-                            :items="positions"
-                            label="Novo Cargo"
+                            return-object
+                            label="Cargo"
                             prepend-icon="mdi-clipboard-account-outline"
+                            v-model="employee.position"
+                            :items="positions"
+                            item-text="name"
+                            item-value="id"
                         ></v-select>
                     </v-col>
                 </v-row>
             </v-card-text>
 
             <v-card-actions>
-                <v-btn color="primary" submit rounded text>Salvar alterações</v-btn>
+                <v-btn color="primary" type="submit" rounded text>Salvar alterações</v-btn>
             </v-card-actions>
         </v-form>
     </v-card>
@@ -35,7 +29,7 @@
 
 <script>
     export default {
-        name: "EmployeeStatus",
+        name: "EmployeePosition",
 
         props: {
             employee: {
@@ -45,13 +39,13 @@
         },
 
         data: () => ({
-            positions: [
-                'Administrador',
-                'Desenvolvedor',
-                'Financeiro',
-                'Técnico',
-                'RH'
-            ]
+            positions: []
         }),
+
+        created() {
+            this.$http.get("employees/positions").then(response => {
+                this.positions = response.data;
+            });
+        }
     };
 </script>

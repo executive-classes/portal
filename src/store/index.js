@@ -76,7 +76,7 @@ export default new Vuex.Store({
     getters: {
         logged: state => state.token != null,
         token: state => state.token,
-        user: state => new User(state.user, state.privileges)
+        user: state => new User(state.user).withPrivileges(state.privileges)
     },
 
     plugins: [
