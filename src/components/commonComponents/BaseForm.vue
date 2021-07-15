@@ -63,6 +63,10 @@
                     this.$emit("submit", this.args);
                 }
             },
+        },
+
+        created() {
+            this.$validator.pushForm(this.name);
         }
     };
 </script>

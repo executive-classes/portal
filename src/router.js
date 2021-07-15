@@ -65,13 +65,13 @@ const router = new Router({
                     name: "employees.show",
                     component: () => import("@/views/employees/Employee"),
                     meta: {
-                        privilege: 'employee:get',
+                        privilege: 'employee:update',
                         title: 'Funcionário'
                     }
                 },
                 {
                     path: "teachers",
-                    name: "teachers",
+                    name: "teachers.list",
                     component: () => import("@/views/teachers/Teachers"),
                     meta: {
                         privilege: 'teacher:get',
@@ -79,11 +79,20 @@ const router = new Router({
                     }
                 },
                 {
+                    path: "teachers/new",
+                    name: "teachers.create",
+                    component: () => import("@/views/teachers/NewTeacher"),
+                    meta: {
+                        privilege: 'teacher:create',
+                        title: 'Novo Professor'
+                    }
+                },
+                {
                     path: "teachers/:id",
-                    name: "teacher",
+                    name: "teachers.show",
                     component: () => import("@/views/teachers/Teacher"),
                     meta: {
-                        privilege: 'teacher:get',
+                        privilege: 'teacher:update',
                         title: 'Professor'
                     }
                 },

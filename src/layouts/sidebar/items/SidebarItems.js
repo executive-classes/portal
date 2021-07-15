@@ -13,7 +13,7 @@ export default [
     {
         title: "Professores",
         icon: "fas fa-chalkboard-teacher",
-        to: { name: "teachers" },
+        to: { name: "teachers.list" },
         privilege: 'teacher:get'
     },
     {

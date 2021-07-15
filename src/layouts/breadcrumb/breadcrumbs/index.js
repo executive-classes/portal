@@ -35,17 +35,23 @@ export default {
         to: { name: "employees.create" },
         parent: 'employees.list',
     },
-    teachers: {
+    "teachers.list": {
         text: "Professores",
         exact: true,
-        to: { name: "teachers" },
+        to: { name: "teachers.list" },
         parent: 'home',
     },
-    teacher: {
+    "teachers.show": {
         text: "Professor",
         exact: true,
-        to: { name: "teacher" },
-        parent: 'teachers',
+        to: { name: "teachers.show" },
+        parent: 'teachers.list',
+    },
+    "teachers.create": {
+        text: "Novo Professor",
+        exact: true,
+        to: { name: "teachers.create" },
+        parent: 'teachers.list',
     },
     students: {
         text: "Alunos",

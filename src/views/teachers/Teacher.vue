@@ -1,72 +1,103 @@
 <template>
-    <base-card :title="teacher.name" icon="fa-chalkboard-teacher">
+    <base-card :title="teacher.name" icon="fa-user-tie">
         <base-alert></base-alert>
 
-        <v-tabs :vertical="vertical">
+        <base-tabs>
             <v-tab>
                 <v-icon left>fa-id-card</v-icon>Dados
             </v-tab>
             <v-tab>
+                <v-icon left>fa-file-alt</v-icon>Documentos
+            </v-tab>
+            <v-tab>
                 <v-icon left>fa-toggle-on</v-icon>Mudar Status
+            </v-tab>
+            <v-tab>
+                <v-icon left>fa-cog</v-icon>Mudar Configurações
             </v-tab>
 
             <v-tab-item>
-                <TeacherData :teacher="teacher" @submit="submit()"></TeacherData>
+                <base-form
+                    name="teacherData"
+                    :args="{type: 'data'}"
+                    title="Dados de Perfil"
+                    @submit="submit($event)"
+                >
+                    <TeacherTimestampsFields :teacher="teacher"></TeacherTimestampsFields>
+                    <UserDataFields :user="teacher.user" formName="teacherData"></UserDataFields>
+                </base-form>
             </v-tab-item>
             <v-tab-item>
-                <TeacherStatus :teacher="teacher" @submit="submit()"></TeacherStatus>
+                <base-form
+                    name="teacherTax"
+                    :args="{type: 'tax'}"
+                    title="Documentos"
+                    @submit="submit($event)"
+                >
+                    <UserTaxFields :user="teacher.user" formName="teacherTax"></UserTaxFields>
+                </base-form>
             </v-tab-item>
-        </v-tabs>
+            <v-tab-item>
+                <base-form
+                    name="teacherStatus"
+                    :args="{type: 'status'}"
+                    title="Mudar Status"
+                    @submit="submit($event)"
+                >
+                    <TeacherStatusFields :teacher="teacher"></TeacherStatusFields>
+                </base-form>
+            </v-tab-item>
+            <v-tab-item>
+                <base-form
+                    name="teacherSettings"
+                    :args="{type: 'settings'}"
+                    title="Configurações de sistema"
+                    @submit="submit($event)"
+                >
+                    <UserSettingsFields :user="teacher.user"></UserSettingsFields>
+                </base-form>
+            </v-tab-item>
+        </base-tabs>
     </base-card>
 </template>
 
 <script>
-    import TeacherData from "./tabs/TeacherData";
-    import TeacherStatus from "./tabs/TeacherStatus";
+    import UserDataFields from "@/components/appComponents/userComponents/UserDataFields";
+    import UserTaxFields from "@/components/appComponents/userComponents/UserTaxFields";
+    import UserSettingsFields from "@/components/appComponents/userComponents/UserSettingsFields";
+    import TeacherTimestampsFields from "@/components/appComponents/teacherComponents/TeacherTimestampsFields";
+    import TeacherStatusFields from "@/components/appComponents/teacherComponents/TeacherStatusFields";
+    import Teacher from "@/domain/teacher/Teacher";
 
     export default {
-        name: "User",
+        name: "Teacher",
 
         components: {
-            TeacherData,
-            TeacherStatus
+            UserDataFields,
+            UserTaxFields,
+            UserSettingsFields,
+            TeacherTimestampsFields,
+            TeacherStatusFields
         },
 
         data: () => ({
-            teacher: {}
+            teacher: new Teacher()
         }),
 
-        computed: {
-            vertical() {
-                if (["xs", "sm"].includes(this.$vuetify.breakpoint.name)) {
-                    return false;
-                }
-
-                return true;
-            }
-        },
-
         methods: {
-            submit() {
-                console.log(this.teacher);
-                // this.$http
-                //     .put("teachers", this.teacher)
-                //     .then(response => (this.teacher = response.data))
-                //     .catch(error => this.$alert.error(error.message));
+            submit(action) {
+                this.teacher
+                    .update(action.type)
+                    .then(() => this.$alert.success("Professor atualizado."))
+                    .catch(error => this.$alert.error(error.message));
             }
         },
 
         created() {
             this.$http
                 .get(`teachers/${this.$route.params.id}`)
-                .then(response => (this.teacher = response.data))
+                .then(response => (this.teacher = new Teacher(response.data)))
                 .catch(error => this.$alert.error(error.message));
         }
     };
 </script>
-
-<style>
-    .v-tab {
-        justify-content: start;
-    }
-</style>
