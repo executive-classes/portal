@@ -51,7 +51,7 @@
     import Teacher from "@/domain/teacher/Teacher";
 
     export default {
-        name: "NewEmployee",
+        name: "NewTeacher",
 
         components: {
             UserDataFields,

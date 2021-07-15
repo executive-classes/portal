@@ -29,10 +29,10 @@ export default {
         to: { name: "employees.show" },
         parent: 'employees.list',
     },
-    "employees.create": {
+    "employees.new": {
         text: "Novo Funcionário",
         exact: true,
-        to: { name: "employees.create" },
+        to: { name: "employees.new" },
         parent: 'employees.list',
     },
     "teachers.list": {
@@ -47,17 +47,23 @@ export default {
         to: { name: "teachers.show" },
         parent: 'teachers.list',
     },
-    "teachers.create": {
+    "teachers.new": {
         text: "Novo Professor",
         exact: true,
-        to: { name: "teachers.create" },
+        to: { name: "teachers.new" },
         parent: 'teachers.list',
     },
-    students: {
+    "students.list": {
         text: "Alunos",
         exact: true,
-        to: { name: "students" },
+        to: { name: "students.list" },
         parent: 'home',
+    },
+    "students.show": {
+        text: "Aluno",
+        exact: true,
+        to: { name: "students.show" },
+        parent: 'students.list',
     },
     "bugs.list": {
         text: "Bugs",

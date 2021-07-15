@@ -53,7 +53,7 @@ const router = new Router({
                 },
                 {
                     path: "employees/new",
-                    name: "employees.create",
+                    name: "employees.new",
                     component: () => import("@/views/employees/NewEmployee"),
                     meta: {
                         privilege: 'employee:create',
@@ -65,7 +65,7 @@ const router = new Router({
                     name: "employees.show",
                     component: () => import("@/views/employees/Employee"),
                     meta: {
-                        privilege: 'employee:update',
+                        privilege: 'employee:get',
                         title: 'Funcionário'
                     }
                 },
@@ -80,7 +80,7 @@ const router = new Router({
                 },
                 {
                     path: "teachers/new",
-                    name: "teachers.create",
+                    name: "teachers.new",
                     component: () => import("@/views/teachers/NewTeacher"),
                     meta: {
                         privilege: 'teacher:create',
@@ -92,17 +92,26 @@ const router = new Router({
                     name: "teachers.show",
                     component: () => import("@/views/teachers/Teacher"),
                     meta: {
-                        privilege: 'teacher:update',
+                        privilege: 'teacher:get',
                         title: 'Professor'
                     }
                 },
                 {
                     path: "students",
-                    name: "students",
+                    name: "students.list",
                     component: () => import("@/views/students/Students"),
                     meta: {
                         privilege: 'student:get',
                         title: 'Alunos'
+                    }
+                },
+                {
+                    path: "students/:id",
+                    name: "students.show",
+                    component: () => import("@/views/students/Student"),
+                    meta: {
+                        privilege: 'student:get',
+                        title: 'Aluno'
                     }
                 },
                 {

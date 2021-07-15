@@ -19,7 +19,7 @@ export default [
     {
         title: "Alunos",
         icon: "fas fa-user-graduate",
-        to: { name: "students" },
+        to: { name: "students.list" },
         privilege: 'student:get'
     },
     {

@@ -3,7 +3,7 @@
         <base-alert></base-alert>
 
         <span slot="header">
-            <v-btn class="mt-2" text color="primary" :to="{name: 'employees.create'}">
+            <v-btn class="mt-2" text color="primary" :to="{name: 'employees.new'}">
                 <v-icon>mdi-plus</v-icon>Funcionário
             </v-btn>
         </span>
