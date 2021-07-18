@@ -5,7 +5,7 @@
             <v-btn
                 icon
                 color="primary"
-                :to="{name: 'students.show', params: {student_id: student.id}}"
+                :to="{name: 'students.show', params: {customer_id: student.customer.id, student_id: student.id}}"
                 :disabled="student.status.id != 'active'"
                 v-bind="props.attrs"
                 v-on="props.on"

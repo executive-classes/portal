@@ -17,6 +17,12 @@ export default {
         to: { name: "profile" },
         parent: 'home',
     },
+    "profile.students": {
+        text: "Alunos",
+        exact: true,
+        to: { name: "profile.students" },
+        parent: 'home',
+    },
     "employees.list": {
         text: "Funcionários",
         exact: true,
@@ -88,12 +94,6 @@ export default {
         params: ['customer_id', 'biller_id'],
         parent: 'customers.show',
     },
-    "students.list": {
-        text: "Alunos",
-        exact: true,
-        to: { name: "students.list" },
-        parent: 'home',
-    },
     "students.new": {
         text: "Novo Aluno",
         exact: true,
@@ -105,8 +105,8 @@ export default {
         text: "Aluno",
         exact: true,
         to: { name: "students.show", params: {} },
-        params: ['student_id'],
-        parent: 'students.list',
+        params: ['customer_id', 'student_id'],
+        parent: 'customers.show',
     },
     "bugs.list": {
         text: "Bugs",

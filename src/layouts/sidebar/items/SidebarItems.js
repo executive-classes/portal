@@ -25,7 +25,7 @@ export default [
     {
         title: "Meus Alunos",
         icon: "fas fa-user-graduate",
-        to: { name: "students.list" },
+        to: { name: "profile.students" },
         privilege: 'student:get'
     },
     {

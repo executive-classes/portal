@@ -43,6 +43,15 @@ const router = new Router({
                     }
                 },
                 {
+                    path: "students",
+                    name: "profile.students",
+                    component: () => import("@/views/students/MyStudents"),
+                    meta: {
+                        privilege: 'student:get',
+                        title: 'Meus Alunos'
+                    }
+                },
+                {
                     path: "employees",
                     name: "employees.list",
                     component: () => import("@/views/employees/Employees"),
@@ -154,25 +163,16 @@ const router = new Router({
                                 title: 'Novo Aluno'
                             }
                         },
+                        {
+                            path: "students/:student_id",
+                            name: "students.show",
+                            component: () => import("@/views/students/Student"),
+                            meta: {
+                                privilege: 'student:get',
+                                title: 'Aluno'
+                            }
+                        },
                     ]
-                },
-                {
-                    path: "students",
-                    name: "students.list",
-                    component: () => import("@/views/students/Students"),
-                    meta: {
-                        privilege: 'student:get',
-                        title: 'Alunos'
-                    }
-                },
-                {
-                    path: "students/:student_id",
-                    name: "students.show",
-                    component: () => import("@/views/students/Student"),
-                    meta: {
-                        privilege: 'student:get',
-                        title: 'Aluno'
-                    }
                 },
                 {
                     path: "bugs",
