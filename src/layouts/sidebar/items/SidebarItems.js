@@ -17,7 +17,13 @@ export default [
         privilege: 'teacher:get'
     },
     {
-        title: "Alunos",
+        title: "Clientes",
+        icon: "fas fa-users",
+        to: { name: "customers.list" },
+        privilege: 'customer:get'
+    },
+    {
+        title: "Meus Alunos",
         icon: "fas fa-user-graduate",
         to: { name: "students.list" },
         privilege: 'student:get'

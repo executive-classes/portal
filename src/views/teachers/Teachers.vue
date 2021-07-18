@@ -1,39 +1,35 @@
 <template>
-    <base-card title="Professores" icon="fa-chalkboard-teacher">
+    <base-main-card title="Professores" icon="fa-chalkboard-teacher">
         <base-alert></base-alert>
 
-        <span slot="header">
-            <v-btn class="mt-2" text color="primary" :to="{name: 'teachers.new'}">
-                <v-icon>mdi-plus</v-icon>Professor
-            </v-btn>
-        </span>
-
         <base-table :headers="headers" :items="teachers" :sort-by="['id']" :loading="loading">
+            <span slot="header">
+                <v-btn rounded small class="ml-3" color="primary" :to="{name: 'teachers.new'}">
+                    <v-icon>mdi-plus</v-icon>Professor
+                </v-btn>
+            </span>
+
             <template v-slot:item.actions="{ item }">
-                <v-btn
-                    icon
-                    color="primary"
-                    :to="{name: 'teachers.show', params: {id: item.id}}"
-                    :disabled="item.status.id != 'active'"
-                >
-                    <v-icon small>mdi-pencil</v-icon>
-                </v-btn>
-                <v-btn icon color="danger" @click="cancel(item)" v-if="item.status.id == 'active'">
-                    <v-icon small>mdi-block-helper</v-icon>
-                </v-btn>
-                <v-btn icon color="success" @click="reactivate(item)" v-else>
-                    <v-icon small>mdi-check</v-icon>
-                </v-btn>
+                <TeacherTableActions
+                    :teacher="item"
+                    @cancel="cancel(item)"
+                    @reactivate="reactivate(item)"
+                ></TeacherTableActions>
             </template>
         </base-table>
-    </base-card>
+    </base-main-card>
 </template>
 
 <script>
+    import TeacherTableActions from "@/components/appComponents/teacherComponents/table/TeacherTableActions";
     import Teacher from "@/domain/teacher/Teacher";
 
     export default {
         name: "Teachers",
+
+        components: {
+            TeacherTableActions
+        },
 
         data: () => ({
             headers: [

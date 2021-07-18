@@ -1,39 +1,35 @@
 <template>
-    <base-card title="Funcionários" icon="fa-user-tie">
+    <base-main-card title="Funcionários" icon="fa-user-tie">
         <base-alert></base-alert>
 
-        <span slot="header">
-            <v-btn class="mt-2" text color="primary" :to="{name: 'employees.new'}">
-                <v-icon>mdi-plus</v-icon>Funcionário
-            </v-btn>
-        </span>
-
         <base-table :headers="headers" :items="employees" :sort-by="['id']" :loading="loading">
+            <span slot="header">
+                <v-btn rounded small class="ml-3" color="primary" :to="{name: 'employees.new'}">
+                    <v-icon>mdi-plus</v-icon>Funcionário
+                </v-btn>
+            </span>
+
             <template v-slot:item.actions="{ item }">
-                <v-btn
-                    icon
-                    color="primary"
-                    :to="{name: 'employees.show', params: {id: item.id}}"
-                    :disabled="item.status.id != 'active'"
-                >
-                    <v-icon small>mdi-pencil</v-icon>
-                </v-btn>
-                <v-btn icon color="danger" @click="cancel(item)" v-if="item.status.id == 'active'">
-                    <v-icon small>mdi-block-helper</v-icon>
-                </v-btn>
-                <v-btn icon color="success" @click="reactivate(item)" v-else>
-                    <v-icon small>mdi-check</v-icon>
-                </v-btn>
+                <EmployeeTableActions
+                    :employee="item"
+                    @cancel="cancel(item)"
+                    @reactivate="reactivate(item)"
+                ></EmployeeTableActions>
             </template>
         </base-table>
-    </base-card>
+    </base-main-card>
 </template>
 
 <script>
+    import EmployeeTableActions from "@/components/appComponents/employeeComponents/table/EmployeeTableActions";
     import Employee from "@/domain/employee/Employee";
 
     export default {
         name: "Employees",
+
+        components: {
+            EmployeeTableActions
+        },
 
         data: () => ({
             headers: [

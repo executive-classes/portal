@@ -61,7 +61,7 @@ const router = new Router({
                     }
                 },
                 {
-                    path: "employees/:id",
+                    path: "employees/:employee_id",
                     name: "employees.show",
                     component: () => import("@/views/employees/Employee"),
                     meta: {
@@ -88,13 +88,73 @@ const router = new Router({
                     }
                 },
                 {
-                    path: "teachers/:id",
+                    path: "teachers/:teacher_id",
                     name: "teachers.show",
                     component: () => import("@/views/teachers/Teacher"),
                     meta: {
                         privilege: 'teacher:get',
                         title: 'Professor'
                     }
+                },
+                {
+                    path: "customers",
+                    name: "customers.list",
+                    component: () => import("@/views/customers/Customers"),
+                    meta: {
+                        privilege: 'customer:get',
+                        title: 'Clientes'
+                    }
+                },
+                {
+                    path: "customers/new",
+                    name: "customers.new",
+                    component: () => import("@/views/customers/NewCustomer"),
+                    meta: {
+                        privilege: 'customer:create',
+                        title: 'Novo Cliente'
+                    }
+                },
+                {
+                    path: "customers/:customer_id",
+                    component: () => import("@/layouts/EmptyLayout"),
+                    children: [
+                        {
+                            path: "/",
+                            name: "customers.show",
+                            component: () => import("@/views/customers/Customer"),
+                            meta: {
+                                privilege: 'customer:get',
+                                title: 'Cliente'
+                            },
+                        },
+                        {
+                            path: "billers/new",
+                            name: "billers.new",
+                            component: () => import("@/views/billers/NewBiller"),
+                            meta: {
+                                privilege: 'biller:create',
+                                title: 'Novo Biller'
+                            }
+                        },
+                        {
+                            path: "billers/:biller_id",
+                            name: "billers.show",
+                            component: () => import("@/views/billers/Biller"),
+                            meta: {
+                                privilege: 'biller:get',
+                                title: 'Biller'
+                            }
+                        },
+                        {
+                            path: "students/new",
+                            name: "students.new",
+                            component: () => import("@/views/students/NewStudent"),
+                            meta: {
+                                privilege: 'student:create',
+                                title: 'Novo Aluno'
+                            }
+                        },
+                    ]
                 },
                 {
                     path: "students",
@@ -106,7 +166,7 @@ const router = new Router({
                     }
                 },
                 {
-                    path: "students/:id",
+                    path: "students/:student_id",
                     name: "students.show",
                     component: () => import("@/views/students/Student"),
                     meta: {

@@ -1,7 +1,7 @@
 import moment from "moment";
 import Vue from "vue";
 import Vuex from "vuex";
-import User from "@/domain/user/User";
+import LoggedUser from "@/domain/user/LoggedUser";
 import createPersistedState from "vuex-persistedstate";
 import * as Cookies from 'js-cookie'
 
@@ -76,7 +76,7 @@ export default new Vuex.Store({
     getters: {
         logged: state => state.token != null,
         token: state => state.token,
-        user: state => new User(state.user).withPrivileges(state.privileges)
+        user: state => new LoggedUser(state.user, state.privileges)
     },
 
     plugins: [

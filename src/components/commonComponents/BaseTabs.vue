@@ -1,10 +1,14 @@
 <template>
     <v-tabs :vertical="vertical ? keepVertical : vertical">
-        <slot />
+        <slot name="header" />
+
+        <slot name="content" />
     </v-tabs>
 </template>
 
 <script>
+    import { mapState } from "vuex";
+
     export default {
         name: "BaseTabs",
 
@@ -16,7 +20,14 @@
         },
 
         computed: {
+            ...mapState([
+                "setHorizontalLayout",
+            ]),
             keepVertical() {
+                if (this.setHorizontalLayout) {
+                    return true;
+                }
+
                 if (["xs", "sm"].includes(this.$vuetify.breakpoint.name)) {
                     return false;
                 }

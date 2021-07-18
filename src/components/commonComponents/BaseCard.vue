@@ -1,31 +1,17 @@
 <template>
-    <v-card shaped>
-        <!-- Card header -->
-        <v-toolbar flat v-if="showHeader">
-            <!-- Card icon -->
-            <v-icon v-if="showIcon" class="mr-3">{{ icon }}</v-icon>
+    <v-card>
+        <!-- Card title -->
+        <v-card-title v-if="showTitle">{{ title }}</v-card-title>
+        <v-card-subtitle v-if="showSubTitle">{{ subtitle }}</v-card-subtitle>
 
-            <!-- Card title -->
-            <v-toolbar-title>{{ title }}</v-toolbar-title>
-
-            <v-spacer></v-spacer>
-
-            <!-- Header additional content -->
-            <slot name="header"></slot>
-        </v-toolbar>
-
-        <v-divider v-if="showHeader"></v-divider>
-
-        <!-- Card content -->
+        <!-- Card Text -->
         <v-card-text>
             <slot />
         </v-card-text>
 
-        <v-divider v-if="showFooter"></v-divider>
-
-        <!-- Card footer -->
-        <v-card-actions v-if="showFooter">
-            <slot name="footer"></slot>
+        <!-- Actions -->
+        <v-card-actions>
+            <slot name="actions" />
         </v-card-actions>
     </v-card>
 </template>
@@ -39,21 +25,18 @@
                 type: String,
                 default: ""
             },
-            icon: {
+            subtitle: {
                 type: String,
                 default: ""
             }
         },
 
         computed: {
-            showHeader() {
+            showTitle() {
                 return this.title != "";
             },
-            showIcon() {
-                return this.icon != "";
-            },
-            showFooter() {
-                return !!this.$slots.footer;
+            showSubTitle() {
+                return this.subtitle != "";
             }
         }
     };

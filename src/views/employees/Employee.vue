@@ -1,77 +1,81 @@
 <template>
-    <base-card :title="employee.name" icon="fa-user-tie">
+    <base-main-card :title="employee.name" icon="fa-user-tie">
         <base-alert></base-alert>
 
         <base-tabs>
-            <v-tab>
-                <v-icon left>fa-id-card</v-icon>Dados
-            </v-tab>
-            <v-tab>
-                <v-icon left>fa-file-alt</v-icon>Documentos
-            </v-tab>
-            <v-tab>
-                <v-icon left>fa-toggle-on</v-icon>Mudar Status
-            </v-tab>
-            <v-tab>
-                <v-icon left>fa-user-edit</v-icon>Mudar Cargo
-            </v-tab>
-            <v-tab>
-                <v-icon left>fa-cog</v-icon>Mudar Configurações
-            </v-tab>
+            <template slot="header">
+                <v-tab>
+                    <v-icon left>fa-id-card</v-icon>Dados
+                </v-tab>
+                <v-tab>
+                    <v-icon left>fa-file-alt</v-icon>Documentos
+                </v-tab>
+                <v-tab>
+                    <v-icon left>fa-toggle-on</v-icon>Mudar Status
+                </v-tab>
+                <v-tab>
+                    <v-icon left>fa-user-edit</v-icon>Mudar Cargo
+                </v-tab>
+                <v-tab>
+                    <v-icon left>fa-cog</v-icon>Mudar Configurações
+                </v-tab>
+            </template>
 
-            <v-tab-item>
-                <base-form
-                    name="employeeData"
-                    :args="{type: 'data'}"
-                    title="Dados de Perfil"
-                    @submit="submit($event)"
-                >
-                    <EmployeeTimestampsFields :employee="employee"></EmployeeTimestampsFields>
-                    <UserDataFields :user="employee.user" formName="employeeData"></UserDataFields>
-                </base-form>
-            </v-tab-item>
-            <v-tab-item>
-                <base-form
-                    name="employeeTax"
-                    :args="{type: 'tax'}"
-                    title="Documentos"
-                    @submit="submit($event)"
-                >
-                    <UserTaxFields :user="employee.user" formName="employeeTax"></UserTaxFields>
-                </base-form>
-            </v-tab-item>
-            <v-tab-item>
-                <base-form
-                    name="employeeStatus"
-                    :args="{type: 'status'}"
-                    title="Mudar Status"
-                    @submit="submit($event)"
-                >
-                    <EmployeeStatusFields :employee="employee"></EmployeeStatusFields>
-                </base-form>
-            </v-tab-item>
-            <v-tab-item>
-                <base-form
-                    name="employeePosition"
-                    :args="{type: 'status'}"
-                    title="Mudar cargo"
-                    @submit="submit($event)"
-                >
-                    <EmployeePositionFields :employee="employee"></EmployeePositionFields>
-                </base-form>
-            </v-tab-item>
-            <v-tab-item>
-                <base-form
-                    name="employeeSettings"
-                    :args="{type: 'settings'}"
-                    title="Configurações de sistema"
-                    @submit="submit($event)"
-                >
-                    <UserSettingsFields :user="employee.user"></UserSettingsFields>
-                </base-form>
-            </v-tab-item>
+            <template slot="content">
+                <v-tab-item>
+                    <base-form
+                        name="employeeData"
+                        :args="{type: 'data'}"
+                        title="Dados de Perfil"
+                        @submit="submit($event)"
+                    >
+                        <EmployeeTimestampsFields :employee="employee"></EmployeeTimestampsFields>
+                        <UserDataFields :user="employee.user" formName="employeeData"></UserDataFields>
+                    </base-form>
+                </v-tab-item>
+                <v-tab-item>
+                    <base-form
+                        name="employeeTax"
+                        :args="{type: 'tax'}"
+                        title="Documentos"
+                        @submit="submit($event)"
+                    >
+                        <UserTaxFields :user="employee.user" formName="employeeTax"></UserTaxFields>
+                    </base-form>
+                </v-tab-item>
+                <v-tab-item>
+                    <base-form
+                        name="employeeStatus"
+                        :args="{type: 'status'}"
+                        title="Mudar Status"
+                        @submit="submit($event)"
+                    >
+                        <EmployeeStatusFields :employee="employee"></EmployeeStatusFields>
+                    </base-form>
+                </v-tab-item>
+                <v-tab-item>
+                    <base-form
+                        name="employeePosition"
+                        :args="{type: 'status'}"
+                        title="Mudar cargo"
+                        @submit="submit($event)"
+                    >
+                        <EmployeePositionFields :employee="employee"></EmployeePositionFields>
+                    </base-form>
+                </v-tab-item>
+                <v-tab-item>
+                    <base-form
+                        name="employeeSettings"
+                        :args="{type: 'settings'}"
+                        title="Configurações de sistema"
+                        @submit="submit($event)"
+                    >
+                        <UserSettingsFields :user="employee.user"></UserSettingsFields>
+                    </base-form>
+                </v-tab-item>
+            </template>
         </base-tabs>
-    </base-card>
+    </base-main-card>
 </template>
 
 <script>
@@ -110,7 +114,7 @@
 
         created() {
             this.$http
-                .get(`employees/${this.$route.params.id}`)
+                .get(`employees/${this.$route.params.employee_id}`)
                 .then(response => this.employee.fill(response.data))
                 .catch(error => this.$alert.error(error.message));
         }

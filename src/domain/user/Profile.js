@@ -8,6 +8,15 @@ export default class Profile extends User {
     }
 
     /**
+     * Update the user password.
+     * 
+     * @returns Promise
+     */
+    updatePassword() {
+        return this._update(this._sanitizePassword());
+    }
+
+    /**
      * Make the PUT request with the user data.
      * 
      * @param {Object} data 
@@ -30,20 +39,13 @@ export default class Profile extends User {
      */
     _sanitize() {
         return {
-            ...this._sanitizeData(),
-            ...this._sanitizeTax(),
-            ...this._sanitizePassword(),
-            ...this._sanitizeSettings()
+            ... this._sanitizeData(),
+            ... this.tax.sanitize(),
+            ... this.tax_alt.sanitize(),
+            ... this.uf.sanitize(),
+            ... this._sanitizePassword(),
+            ... this._sanitizeSettings()
         }
-    }
-
-    /**
-     * Update the user password.
-     * 
-     * @returns Promise
-     */
-    updatePassword() {
-        return this._update(this._sanitizePassword());
     }
 
     /**

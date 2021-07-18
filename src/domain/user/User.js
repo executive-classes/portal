@@ -1,5 +1,7 @@
 import http from '@/http';
 import Model from '../model/Model';
+import Tax from '../tax/Tax';
+import Uf from '../address/Uf';
 
 export default class User extends Model {
     constructor(data = {}, props = []) {
@@ -16,14 +18,10 @@ export default class User extends Model {
             'name',
             'phone',
             'phone_alt',
-            'tax_type',
-            'tax_code',
-            'tax_type_alt',
-            'tax_code_alt',
             'language'
         );
 
-        super(data, props, 'id');
+        super(data, 'id', props);
     }
 
     /**
@@ -31,32 +29,10 @@ export default class User extends Model {
      *
      * @param {Object} data
      */
-    _customProperties() {
-        this.uf = null;
-    }
-
-    /**
-     * Define the user's privileges.
-     * 
-     * @param {Array} privileges 
-     * @returns This
-     */
-    withPrivileges(privileges = []) {
-        if (toString.call(privileges) == "[object Array]") {
-            this._privileges = privileges;
-        }
-
-        return this;
-    }
-
-    /**
-     * Test if a user have a privilege.
-     * 
-     * @param {String} privilege 
-     * @returns Boolean
-     */
-    can(privilege) {
-        return this._privileges.includes('*') || this._privileges.includes(privilege);
+    _customProperties(data) {
+        this.tax = new Tax(data.tax);
+        this.tax_alt = new Tax({ ...data.tax_alt, alt: true });
+        this.uf = new Uf();
     }
 
     /**
@@ -65,8 +41,35 @@ export default class User extends Model {
      * @param {String} email 
      * @returns Promise
      */
-    searchByEmail(email) {
-        return this._search({ email: email });
+    searchByEmail() {
+        return this._search({ email: this.email });
+    }
+
+    /**
+     * Update the user data.
+     * 
+     * @returns Promise
+     */
+    updateData() {
+        return this._update(this._sanitizeData());
+    }
+
+    /**
+     * Update the user taxes.
+     *
+     * @returns Promise
+     */
+    updateTax() {
+        return this._update(this._sanitizeTax());
+    }
+
+    /**
+     * Update the user settings.
+     * 
+     * @returns Promise
+     */
+    updateSettings() {
+        return this._update(this._sanitizeSettings());
     }
 
     /**
@@ -133,19 +136,10 @@ export default class User extends Model {
      */
     _sanitize() {
         return {
-            ...this._sanitizeData(),
-            ...this._sanitizeTax(),
-            ...this._sanitizeSettings()
+            ... this._sanitizeData(),
+            ... this._sanitizeTax(),
+            ... this._sanitizeSettings()
         }
-    }
-
-    /**
-     * Update the user data.
-     * 
-     * @returns Promise
-     */
-    updateData() {
-        return this._update(this._sanitizeData());
     }
 
     /**
@@ -163,50 +157,16 @@ export default class User extends Model {
     }
 
     /**
-     * Update the user taxes.
-     *
-     * @returns Promise
-     */
-    updateTax() {
-        return this._update(this._sanitizeTax());
-    }
-
-    /**
      * Sanitize the user tax data to the API request.
      * 
      * @returns Object
      */
     _sanitizeTax() {
         return {
-            ... this.tax_type && this.tax_code
-                ? {
-                    tax_type_id: this.tax_type.id,
-                    tax_code: this.tax_code
-                } : {},
-
-            ... this.tax_type_alt !== undefined && this.tax_code_alt !== undefined
-                ? (
-                    this.tax_type_alt && this.tax_type_alt.id != null
-                        ? {
-                            tax_type_alt_id: this.tax_type_alt.id,
-                            tax_code_alt: this.tax_code_alt
-                        } : {
-                            tax_type_alt_id: null,
-                            tax_code_alt: null
-                        }
-                ) : {},
-
-            ... this.uf ? { uf: this.uf.short_name } : {}
+            ... this.tax.sanitize(),
+            ... this.tax_alt.sanitize(),
+            ... this.uf.sanitize(),
         };
-    }
-
-    /**
-     * Update the user settings.
-     * 
-     * @returns Promise
-     */
-    updateSettings() {
-        return this._update(this._sanitizeSettings());
     }
 
     /**

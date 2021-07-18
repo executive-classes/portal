@@ -1,8 +1,11 @@
 export default class Model {
-    constructor(data, props, pk) {
+    constructor(data, pk, props, defaultVals = {}) {
         this._properties = props;
+        this._default_vals = defaultVals;
         this._primary_key = pk;
-        this._fillProperties(data, props);
+
+        this.fill(data);
+        
         this._log();
     }
 
@@ -11,40 +14,18 @@ export default class Model {
      * 
      * @param {Object} data 
      */
-    fill(data) {
-        this._fillProperties(data, this._properties);
+    fill(data, fillNull = true) {
+        this._fillProperties(data, fillNull);
     }
 
     /**
-     * Fill the given data into the object.
+     * Clean the Model class.
      * 
      * @param {Object} data 
-     * @param {Array} props
      */
-    _fillProperties(data, props) {
-        // Verify if there was any property defined.
-        if (this._properties == []) {
-            throw new Error(`The ${this.constructor.name} required properties need to be defined`);
-        }
-
-        // Save the original data.
-        this._original = data;
-
-        // Fill the data into the object.
-        props.forEach(property => {
-            this[property] = data[property];
-        });
-
-        // Declare the custom properties.
-        this._customProperties(data);
+    clean() {
+        this._cleanProperties();
     }
-
-    /**
-     * Define the custom properties.
-     *
-     * @param {Object} data
-     */
-    _customProperties() {}
 
     /**
      * Check if a property exists.
@@ -107,9 +88,77 @@ export default class Model {
     }
 
     /**
-     * Make the POST request with the model data.
+     * Fill the given data into the object.
      * 
      * @param {Object} data 
+     * @param {Array} props
+     */
+    _fillProperties(data, fillNull = true) {
+        // Verify if there was any property defined.
+        if (this._properties == []) {
+            throw new Error(`The ${this.constructor.name} required properties need to be defined`);
+        }
+
+        // Save the original data.
+        this._original = data;
+
+        // Fill the data into the object.
+        this._properties.forEach(property => {
+            if (this[property] === undefined) {
+                if (data[property] === undefined) {
+                    this[property] = this._default_vals[property];
+                } else {
+                    this[property] = data[property];
+                }
+            } else {
+                if (data[property] || (data[property] === null && fillNull)) {
+                    this[property] = data[property];
+                }
+            }
+        });
+
+        // Declare the custom properties.
+        this._customProperties(data);
+    }
+
+    /**
+     * Fill the given data into the object.
+     */
+    _cleanProperties() {
+        // Verify if there was any property defined.
+        if (this._properties == []) {
+            throw new Error(`The ${this.constructor.name} required properties need to be defined`);
+        }
+
+        // Clean the object.
+        this._properties.forEach(property => {
+            if (this._default_vals[property]) {
+                this[property] = this._default_vals[property];
+            } else {
+                this[property] = undefined;
+            }
+        });
+    }
+
+    /**
+     * Define the custom properties.
+     *
+     * @param {Object} data
+     */
+    _customProperties() {}
+
+    /**
+     * Make the GET request with the model data.
+     * 
+     * @returns Promise
+     */
+    _search() {
+        throw new Error('The _search method should be implemented');
+    }
+
+    /**
+     * Make the POST request with the model data.
+     * 
      * @returns Promise
      */
     _create() {
@@ -119,7 +168,6 @@ export default class Model {
     /**
      * Make the PUT request with the model data.
      * 
-     * @param {Object} data 
      * @returns Promise
      */
     _update() {

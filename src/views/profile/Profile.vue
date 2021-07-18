@@ -1,63 +1,67 @@
 <template>
-    <base-card :title="user.name" icon="fa-user">
+    <base-main-card :title="user.name" icon="fa-user">
         <base-alert></base-alert>
 
         <base-tabs>
-            <v-tab>
-                <v-icon left>fa-id-card</v-icon>Dados
-            </v-tab>
-            <v-tab>
-                <v-icon left>fa-file-alt</v-icon>Documentos
-            </v-tab>
-            <v-tab>
-                <v-icon left>fa-lock</v-icon>Alterar Senha
-            </v-tab>
-            <v-tab>
-                <v-icon left>fa-cog</v-icon>Configurações
-            </v-tab>
+            <template slot="header">
+                <v-tab>
+                    <v-icon left>fa-id-card</v-icon>Dados
+                </v-tab>
+                <v-tab>
+                    <v-icon left>fa-file-alt</v-icon>Documentos
+                </v-tab>
+                <v-tab>
+                    <v-icon left>fa-lock</v-icon>Alterar Senha
+                </v-tab>
+                <v-tab>
+                    <v-icon left>fa-cog</v-icon>Configurações
+                </v-tab>
+            </template>
 
-            <v-tab-item>
-                <base-form
-                    name="profileData"
-                    :args="{type: 'data'}"
-                    title="Dados de Perfil"
-                    @submit="submit($event)"
-                >
-                    <UserDataFields :user="user" formName="profileData"></UserDataFields>
-                </base-form>
-            </v-tab-item>
-            <v-tab-item>
-                <base-form
-                    name="profileTax"
-                    :args="{type: 'tax'}"
-                    title="Documentos"
-                    @submit="submit($event)"
-                >
-                    <UserTaxFields :user="user" formName="profileTax"></UserTaxFields>
-                </base-form>
-            </v-tab-item>
-            <v-tab-item>
-                <base-form
-                    name="profilePassword"
-                    :args="{type: 'password'}"
-                    title="Alterar senha"
-                    @submit="submit($event)"
-                >
-                    <UserPasswordFields :user="user" formName="profilePassword"></UserPasswordFields>
-                </base-form>
-            </v-tab-item>
-            <v-tab-item>
-                <base-form
-                    name="profileSettings"
-                    :args="{type: 'settings'}"
-                    title="Configurações de sistema"
-                    @submit="submit($event)"
-                >
-                    <UserSettingsFields :user="user"></UserSettingsFields>
-                </base-form>
-            </v-tab-item>
+            <template slot="content">
+                <v-tab-item>
+                    <base-form
+                        name="profileData"
+                        :args="{type: 'data'}"
+                        title="Dados de Perfil"
+                        @submit="submit($event)"
+                    >
+                        <UserDataFields :user="user" formName="profileData"></UserDataFields>
+                    </base-form>
+                </v-tab-item>
+                <v-tab-item>
+                    <base-form
+                        name="profileTax"
+                        :args="{type: 'tax'}"
+                        title="Documentos"
+                        @submit="submit($event)"
+                    >
+                        <UserTaxFields :user="user" formName="profileTax"></UserTaxFields>
+                    </base-form>
+                </v-tab-item>
+                <v-tab-item>
+                    <base-form
+                        name="profilePassword"
+                        :args="{type: 'password'}"
+                        title="Alterar senha"
+                        @submit="submit($event)"
+                    >
+                        <UserPasswordFields :user="user" formName="profilePassword"></UserPasswordFields>
+                    </base-form>
+                </v-tab-item>
+                <v-tab-item>
+                    <base-form
+                        name="profileSettings"
+                        :args="{type: 'settings'}"
+                        title="Configurações de sistema"
+                        @submit="submit($event)"
+                    >
+                        <UserSettingsFields :user="user"></UserSettingsFields>
+                    </base-form>
+                </v-tab-item>
+            </template>
         </base-tabs>
-    </base-card>
+    </base-main-card>
 </template>
 
 <script>

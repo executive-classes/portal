@@ -36,19 +36,17 @@
 </template>
 
 <script>
+    import { formatter } from "@/mixins";
+
     export default {
         name: "EmployeeTimestampsFields",
+
+        mixins: [formatter],
 
         props: {
             employee: {
                 type: Object,
                 required: true
-            }
-        },
-
-        methods: {
-            formatDate(date) {
-                return this.$moment(date).format("DD/MM/YYYY, HH:mm:ss");
             }
         }
     };

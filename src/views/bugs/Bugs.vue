@@ -1,5 +1,5 @@
 <template>
-    <base-card title="Bugs" icon="fa-bug">
+    <base-main-card title="Bugs" icon="fa-bug">
         <base-alert></base-alert>
 
         <base-table
@@ -36,10 +36,11 @@
                 <ErrorDialog :error="item.error"></ErrorDialog>
             </template>
         </base-table>
-    </base-card>
+    </base-main-card>
 </template>
 
 <script>
+    import { formatter } from "@/mixins";
     import RequestDialog from "@/components/appComponents/bugsComponents/RequestDialog";
     import DataDialog from "@/components/appComponents/bugsComponents/DataDialog";
     import ErrorDialog from "@/components/appComponents/bugsComponents/ErrorDialog";
@@ -52,6 +53,8 @@
             DataDialog,
             ErrorDialog
         },
+
+        mixins: [formatter],
 
         data: () => ({
             headers: [
@@ -86,10 +89,6 @@
         }),
 
         methods: {
-            formatDate(date) {
-                return this.$moment(date).format("DD/MM/YYYY, HH:mm:ss ");
-            },
-
             filter(value, search, item) {
                 // Check if the value is null
                 // Only can be null if was the user column

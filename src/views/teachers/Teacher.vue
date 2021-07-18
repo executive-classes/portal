@@ -1,64 +1,68 @@
 <template>
-    <base-card :title="teacher.name" icon="fa-user-tie">
+    <base-main-card :title="teacher.name" icon="fa-chalkboard-teacher">
         <base-alert></base-alert>
 
         <base-tabs>
-            <v-tab>
-                <v-icon left>fa-id-card</v-icon>Dados
-            </v-tab>
-            <v-tab>
-                <v-icon left>fa-file-alt</v-icon>Documentos
-            </v-tab>
-            <v-tab>
-                <v-icon left>fa-toggle-on</v-icon>Mudar Status
-            </v-tab>
-            <v-tab>
-                <v-icon left>fa-cog</v-icon>Mudar Configurações
-            </v-tab>
+            <template slot="header">
+                <v-tab>
+                    <v-icon left>fa-id-card</v-icon>Dados
+                </v-tab>
+                <v-tab>
+                    <v-icon left>fa-file-alt</v-icon>Documentos
+                </v-tab>
+                <v-tab>
+                    <v-icon left>fa-toggle-on</v-icon>Mudar Status
+                </v-tab>
+                <v-tab>
+                    <v-icon left>fa-cog</v-icon>Mudar Configurações
+                </v-tab>
+            </template>
 
-            <v-tab-item>
-                <base-form
-                    name="teacherData"
-                    :args="{type: 'data'}"
-                    title="Dados de Perfil"
-                    @submit="submit($event)"
-                >
-                    <TeacherTimestampsFields :teacher="teacher"></TeacherTimestampsFields>
-                    <UserDataFields :user="teacher.user" formName="teacherData"></UserDataFields>
-                </base-form>
-            </v-tab-item>
-            <v-tab-item>
-                <base-form
-                    name="teacherTax"
-                    :args="{type: 'tax'}"
-                    title="Documentos"
-                    @submit="submit($event)"
-                >
-                    <UserTaxFields :user="teacher.user" formName="teacherTax"></UserTaxFields>
-                </base-form>
-            </v-tab-item>
-            <v-tab-item>
-                <base-form
-                    name="teacherStatus"
-                    :args="{type: 'status'}"
-                    title="Mudar Status"
-                    @submit="submit($event)"
-                >
-                    <TeacherStatusFields :teacher="teacher"></TeacherStatusFields>
-                </base-form>
-            </v-tab-item>
-            <v-tab-item>
-                <base-form
-                    name="teacherSettings"
-                    :args="{type: 'settings'}"
-                    title="Configurações de sistema"
-                    @submit="submit($event)"
-                >
-                    <UserSettingsFields :user="teacher.user"></UserSettingsFields>
-                </base-form>
-            </v-tab-item>
+            <template slot="content">
+                <v-tab-item>
+                    <base-form
+                        name="teacherData"
+                        :args="{type: 'data'}"
+                        title="Dados de Perfil"
+                        @submit="submit($event)"
+                    >
+                        <TeacherTimestampsFields :teacher="teacher"></TeacherTimestampsFields>
+                        <UserDataFields :user="teacher.user" formName="teacherData"></UserDataFields>
+                    </base-form>
+                </v-tab-item>
+                <v-tab-item>
+                    <base-form
+                        name="teacherTax"
+                        :args="{type: 'tax'}"
+                        title="Documentos"
+                        @submit="submit($event)"
+                    >
+                        <UserTaxFields :user="teacher.user" formName="teacherTax"></UserTaxFields>
+                    </base-form>
+                </v-tab-item>
+                <v-tab-item>
+                    <base-form
+                        name="teacherStatus"
+                        :args="{type: 'status'}"
+                        title="Mudar Status"
+                        @submit="submit($event)"
+                    >
+                        <TeacherStatusFields :teacher="teacher"></TeacherStatusFields>
+                    </base-form>
+                </v-tab-item>
+                <v-tab-item>
+                    <base-form
+                        name="teacherSettings"
+                        :args="{type: 'settings'}"
+                        title="Configurações de sistema"
+                        @submit="submit($event)"
+                    >
+                        <UserSettingsFields :user="teacher.user"></UserSettingsFields>
+                    </base-form>
+                </v-tab-item>
+            </template>
         </base-tabs>
-    </base-card>
+    </base-main-card>
 </template>
 
 <script>
@@ -95,7 +99,7 @@
 
         created() {
             this.$http
-                .get(`teachers/${this.$route.params.id}`)
+                .get(`teachers/${this.$route.params.teacher_id}`)
                 .then(response => (this.teacher = new Teacher(response.data)))
                 .catch(error => this.$alert.error(error.message));
         }

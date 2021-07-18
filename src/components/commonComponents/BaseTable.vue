@@ -1,6 +1,8 @@
 <template>
-    <div>
-        <v-toolbar flat>
+    <v-card>
+        <v-row align="center" class="mx-0">
+            <slot name="header"></slot>
+
             <v-spacer></v-spacer>
 
             <v-text-field
@@ -10,7 +12,7 @@
                 prepend-inner-icon="mdi-magnify"
                 hide-details
             ></v-text-field>
-        </v-toolbar>
+        </v-row>
 
         <v-data-table
             :headers="headers"
@@ -25,10 +27,10 @@
             no-data-text="Nenhum dado encontrado."
         >
             <template v-for="(_, slot) of $scopedSlots" v-slot:[slot]="scope">
-                <slot :name="slot" v-bind="scope" />
+                <slot :name="slot" v-bind="scope" v-if="!componentSlots.includes(slot)"/>
             </template>
         </v-data-table>
-    </div>
+    </v-card>
 </template>
 
 <script>
@@ -64,7 +66,10 @@
         },
 
         data: () => ({
-            searchInput: ""
+            searchInput: "",
+            componentSlots: [
+                'header'
+            ]
         })
     };
 </script>

@@ -40,6 +40,12 @@
             },
 
             addBreadcrumb(breadcrumb) {
+                if (breadcrumb.params != undefined) {
+                    breadcrumb.params.forEach(param => {
+                        breadcrumb.to.params[param] = this.$route.params[param];
+                    });
+                }
+
                 this.breadcrumbs.unshift(breadcrumb);
 
                 if (breadcrumb.parent != null) {

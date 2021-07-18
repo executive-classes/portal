@@ -11,7 +11,7 @@ export default class Teacher extends Model {
             'status',
         );
 
-        super(data, props, 'id');
+        super(data, 'id', props);
     }
 
     /**
@@ -32,6 +32,65 @@ export default class Teacher extends Model {
         return this.user.createOrUpdate()
             .then(() => this._create(this._sanitize()))
             .catch(error => Promise.reject(error));
+    }
+    
+    /**
+     * Update the user data.
+     * 
+     * @returns Promise
+     */
+    updateData() {
+        return this.user.updateData();
+    }
+
+    /**
+     * Update the user taxes.
+     * 
+     * @returns Promise
+     */
+    updateTax() {
+        return this.user.updateTax();
+    }
+
+    /**
+     * Update the teacher status.
+     * 
+     * @returns Promise
+     */
+    updateStatus() {
+        return this._update(this._sanitizeStatus());
+    }
+
+    /**
+     * Update the user settings.
+     * 
+     * @returns Promise
+     */
+    updateSettings() {
+        return this.user.updateSettings();
+    }
+
+    /**
+     * Cancel the Teacher.
+     * 
+     * @returns Promise
+     */
+    cancel() {
+        return http.delete(`teachers/${this.id}`)
+            .then(data => {
+                this.fill(data.data);
+                return Promise.resolve(data);
+            })
+            .catch(error => Promise.reject(error));
+    }
+
+    /**
+     * Reactivate the teacher.
+     * 
+     * @returns Promise
+     */
+    reactivate() {
+        return this._update({ teacher_status_id: 'active' });
     }
 
     /**
@@ -65,18 +124,6 @@ export default class Teacher extends Model {
             .catch(error => Promise.reject(error));
     }
 
-    cancel() {
-        return http.delete(`teachers/${this.id}`)
-            .then(data => {
-                this.fill(data.data);
-                return Promise.resolve(data);
-            })
-            .catch(error => Promise.reject(error));
-    }
-
-    reactivate() {
-        return this._update({ teacher_status_id: 'active' });
-    }
 
     /**
      * Process the teacher properties into a object data 
@@ -91,23 +138,6 @@ export default class Teacher extends Model {
         }
     }
 
-    /**
-     * Update the user data.
-     * 
-     * @returns Promise
-     */
-    updateData() {
-        return this.user.updateData();
-    }
-
-    /**
-     * Update the user taxes.
-     * 
-     * @returns Promise
-     */
-    updateTax() {
-        return this.user.updateTax();
-    }
 
     /**
      * Sanitize the teacher user to the API request.
@@ -121,15 +151,6 @@ export default class Teacher extends Model {
     }
 
     /**
-     * Update the teacher status.
-     * 
-     * @returns Promise
-     */
-    updateStatus() {
-        return this._update(this._sanitizeStatus());
-    }
-
-    /**
      * Sanitize the teacher status to the API request.
      * 
      * @returns Object
@@ -138,14 +159,5 @@ export default class Teacher extends Model {
         return {
             ... this.status ? { teacher_status_id: this.status.id } : {}
         };
-    }
-
-    /**
-     * Update the user settings.
-     * 
-     * @returns Promise
-     */
-    updateSettings() {
-        return this.user.updateSettings();
     }
 }

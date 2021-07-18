@@ -12,7 +12,7 @@ export default class Employee extends Model {
             'position'
         );
 
-        super(data, props, 'id');
+        super(data, 'id', props);
     }
 
     /**
@@ -33,6 +33,74 @@ export default class Employee extends Model {
         return this.user.createOrUpdate()
             .then(() => this._create(this._sanitize()))
             .catch(error => Promise.reject(error));
+    }
+
+    /**
+     * Update the user data.
+     * 
+     * @returns Promise
+     */
+    updateData() {
+        return this.user.updateData();
+    }
+
+    /**
+     * Update the user taxes.
+     * 
+     * @returns Promise
+     */
+    updateTax() {
+        return this.user.updateTax();
+    }
+
+    /**
+     * Update the employee status.
+     * 
+     * @returns Promise
+     */
+    updateStatus() {
+        return this._update(this._sanitizeStatus());
+    }
+
+    /**
+     * Update the employee position.
+     * 
+     * @returns Promise
+     */
+    updatePosition() {
+        return this._update(this._sanitizePosition());
+    }
+
+    /**
+     * Update the user settings.
+     * 
+     * @returns Promise
+     */
+    updateSettings() {
+        return this.user.updateSettings();
+    }
+
+    /**
+     * Cancel the employee.
+     * 
+     * @returns Promise
+     */
+    cancel() {
+        return http.delete(`employees/${this.id}`)
+            .then(data => {
+                this.fill(data.data);
+                return Promise.resolve(data);
+            })
+            .catch(error => Promise.reject(error));
+    }
+
+    /**
+     * Reactivate the Employee.
+     * 
+     * @returns Promise
+     */
+    reactivate() {
+        return this._update({ employee_status_id: 'active' });
     }
 
     /**
@@ -66,19 +134,6 @@ export default class Employee extends Model {
             .catch(error => Promise.reject(error));
     }
 
-    cancel() {
-        return http.delete(`employees/${this.id}`)
-            .then(data => {
-                this.fill(data.data);
-                return Promise.resolve(data);
-            })
-            .catch(error => Promise.reject(error));
-    }
-
-    reactivate() {
-        return this._update({ employee_status_id: 'active' });
-    }
-
     /**
      * Process the employee properties into a object data 
      * to send to API.
@@ -94,24 +149,6 @@ export default class Employee extends Model {
     }
 
     /**
-     * Update the user data.
-     * 
-     * @returns Promise
-     */
-    updateData() {
-        return this.user.updateData();
-    }
-
-    /**
-     * Update the user taxes.
-     * 
-     * @returns Promise
-     */
-    updateTax() {
-        return this.user.updateTax();
-    }
-
-    /**
      * Sanitize the employee user to the API request.
      * 
      * @returns Object
@@ -120,15 +157,6 @@ export default class Employee extends Model {
         return {
             ... this.user.id ? { user_id: this.user.id } : {}
         };
-    }
-
-    /**
-     * Update the employee status.
-     * 
-     * @returns Promise
-     */
-    updateStatus() {
-        return this._update(this._sanitizeStatus());
     }
 
     /**
@@ -143,15 +171,6 @@ export default class Employee extends Model {
     }
 
     /**
-     * Update the employee position.
-     * 
-     * @returns Promise
-     */
-    updatePosition() {
-        return this._update(this._sanitizePosition());
-    }
-
-    /**
      * Sanitize the employee position to the API request.
      * 
      * @returns Object
@@ -160,14 +179,5 @@ export default class Employee extends Model {
         return {
             ... this.position ? { employee_position_id: this.position.id } : {}
         };
-    }
-
-    /**
-     * Update the user settings.
-     * 
-     * @returns Promise
-     */
-    updateSettings() {
-        return this.user.updateSettings();
     }
 }
