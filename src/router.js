@@ -45,10 +45,10 @@ const router = new Router({
                 {
                     path: "students",
                     name: "profile.students",
-                    component: () => import("@/views/students/MyStudents"),
+                    component: () => import("@/views/students/Students"),
                     meta: {
                         privilege: 'student:get',
-                        title: 'Meus Alunos'
+                        title: 'Alunos'
                     }
                 },
                 {
